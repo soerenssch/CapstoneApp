@@ -12,7 +12,7 @@ import datetime
 import base64
 
 st.set_page_config(
-    page_title="My Streamlit App",
+    page_title="Sentiment Analyse",
     layout="wide",
     initial_sidebar_state="expanded",    
 )
