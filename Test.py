@@ -7,9 +7,9 @@ import openai
 import requests
 from tqdm import tqdm
 import time
-# import docx
 import datetime
 import base64
+import openpyxl
 
 
 
@@ -246,8 +246,6 @@ if input_method == SentimentAnalyse:
 
                 output_file_proscons = "reviews_analyzed_negative_proscons.xlsx"
                 df_proscons.to_excel(output_file_proscons, index=False)
-
-
 
                 def generate_csv(df):
                     return df.to_csv(index=False)
