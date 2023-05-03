@@ -1,3 +1,4 @@
+pip install streamlit
 import streamlit as st
 from streamlit_option_menu import option_menu
 from outscraper import ApiClient
@@ -7,7 +8,7 @@ import openai
 import requests
 from tqdm import tqdm
 import time
-import docx
+# import docx
 import datetime
 import base64
 
