@@ -11,8 +11,12 @@ import time
 import datetime
 import base64
 
+
+
+
 st.set_page_config(
     page_title="Sentiment Analyse",
+    page_icon="🔥",
     layout="wide",
     initial_sidebar_state="expanded",    
 )
