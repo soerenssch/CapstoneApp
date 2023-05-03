@@ -1,11 +1,11 @@
 [theme]
 
-primaryColor = '#132f55'
+primaryColor = '#000000'
 
 backgroundColor = '#ece3d6'
 
-secondaryBackgroundColor = '#000000'
+secondaryBackgroundColor = '#132f55'
 
-textColor = '#ffffff'
+textColor = '#000000'
 
 font = "sans serif"
