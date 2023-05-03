@@ -16,7 +16,7 @@ import base64
 
 st.set_page_config(
     page_title="Sentiment Analyse",
-    page_icon="🔥",
+    page_icon="🧊",
     layout="wide",
     initial_sidebar_state="expanded",    
 )
@@ -24,10 +24,6 @@ st.set_page_config(
 logo_left_container = st.container()
 with logo_left_container:
     st.image("VT_logo.png", use_column_width=False, width=150)
-
-# logo_right_container = st.container()
-# with logo_right_container:
-#     st.image("HSG_logo.png", use_column_width=False, width=100)
 
 st.markdown(
     """
@@ -133,56 +129,42 @@ if input_method == WebScraping:
     
     select_all = st.checkbox("Alle Standorte auswählen")
 
-    # col1, col2 = st.columns(2)
-
-    # with col1:
-    #     for label, place_id in list(ID_MAP.items())[:len(ID_MAP) // 2]:
-    #         if select_all or st.checkbox(label):
-    #             input_Outscraper.append(place_id)
-
-    # with col2:
-    #     for label, place_id in list(ID_MAP.items())[len(ID_MAP) // 2:]:
-    #         if select_all or st.checkbox(label):
-    #             input_Outscraper.append(place_id)
-
-    for label in ID_MAP.keys():
-        checkbox_states[label] = select_all
-
+    place_checkboxes = {}
+    for place in ID_MAP:
         if select_all:
-            checkbox_states[label] = True
-
-        if label != "Select all":
-            checkbox_states[label] = st.checkbox(label, value=select_all)
-
-        if checkbox_states[label]:
-            input_Outscraper.append(ID_MAP[label])
-
-        checkbox_states = update_selection(ID_MAP, checkbox_states, label)
-
-        if not checkbox_states[label]:
-            input_Outscraper.remove(ID_MAP[label])
+            place_checkboxes[place] = st.checkbox(place, value=True)
+            input_Outscraper.append(ID_MAP[place])
+        else:
+            place_checkboxes[place] = st.checkbox(place)
+        
+        if place_checkboxes[place]:
+            place_id = ID_MAP[place]
+            if place_id not in input_Outscraper:
+                input_Outscraper.append(place_id)
+        else:
+            place_id = ID_MAP[place]
+            if place_id in input_Outscraper:
+                input_Outscraper.remove(place_id)
 
     Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API Key an")
     client = ApiClient(api_key=Outscraper_APIKey)
 
     date_input = st.date_input('Gib das Datum an, ab dem du die Reviews exportieren willst')
     if date_input > datetime.datetime.today().date():
-      st.error('Fehler: Datum darf nicht in der Zukunft liegen!')
+        st.error('Fehler: Datum darf nicht in der Zukunft liegen!')
     else:
         year = date_input.year
         month = date_input.month
         day = date_input.day
 
-        my_date = datetime.datetime(year, month, day)
-        timestamp = my_date.timestamp()
-        timestamp = int(timestamp)
-        st.session_state.timestamp = timestamp
+    my_date = datetime.datetime(year, month, day)
+    timestamp = my_date.timestamp()
+    timestamp = int(timestamp)
+    st.session_state.timestamp = timestamp
 
     submit = st.button("Submit")
     if submit: 
-
         st.write("WebScraping wird durchgeführt!")
-        
         @st.cache_data(ttl=600)
         def scrape_google_reviews(query, timestamp):
             results = client.google_maps_reviews([query], sort='newest', cutoff=timestamp, reviews_limit=1, language='de')
