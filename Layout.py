@@ -13,72 +13,73 @@ import base64
 
 
 
-ID_MAP = {
-    "Flint's Praxis für Kleintiere": "ChIJg9LTCjq2kUcRlNmsxEGdNoc",
-    'Tierhotel Clinica Alpina Ramosch': "ChIJn9GuzVU3g0cRZAPoW82_WZ0",
-    'Tierklinik Clinica Alpina Celerina': "ChIJi2rFwxh9g0cRKh_m8hTN8SA",
-    'Tierklinik Clinica Alpina Scuol': "ChIJhf6QYJBHg0cRIe8DYQz8JV8"
-}
+st.write("Lade hier die CSV Datei hoch, die du auswerten willst.")
+try:
+    file = st.file_uploader("Upload file", type=["csv"])
+    if file is not None:
+        df = pd.read_csv(file)
+        df = df.dropna()
+        st.dataframe(df)
 
-input_Outscraper = []
 
+        OpenAI_API = st.text_input("Gib hier deinen OpenAI API Key an")
+        openai.api_key = OpenAI_API
+        GPT_API_URL = "https://api.openai.com/v1/chat/completions"
+        Spalte = st.text_input("Wie heisst die Spalte, die du auswerten möchtest?")
+        all_reviews = "\n".join(df[Spalte].tolist())
+        if st.button("Sentiment-Analyse starten"):
 
-select_all = st.checkbox("Alle Standorte auswählen")
+            @st.cache_data(ttl=600)
+            def generate_proscons_list(text):
+                word_blocks = text.split(' ')
+                block_size = 1750
+                blocks = [' '.join(word_blocks[i:i + block_size]) for i in range(0, len(word_blocks), block_size)]
+                proscons = []
 
-place_checkboxes = {}
-for place in ID_MAP:
-    if select_all:
-        place_checkboxes[place] = st.checkbox(place, value=True)
-        input_Outscraper.append(ID_MAP[place])
+                for block in tqdm(blocks, desc="Processing blocks", unit="block"):
+                    messages = [
+                        {"role": "system", "content": "Du bist ein KI-Sprachmodell, das darauf trainiert ist, eine Liste der häufigsten Stärken und Schwächen einer Tierarztpraxis auf der Grundlage von Google Bewertungen zu erstellen."},
+                        {"role": "user", "content": f"Erstelle auf der Grundlage der folgenden Google-Bewertungen eine Liste mit den häufigsten Stärken und Schwächen der Tierarztpraxis: {block}"}
+                    ]
+
+                    completion = openai.ChatCompletion.create(
+                        model="gpt-3.5-turbo",
+                        messages=messages,
+                        # You can change the max_tokens amount to increase or decrease the length of the results pros and cons list. If you increase it too much, you will exceed chatGPT's limits though.
+                        max_tokens=250,
+                        n=1,
+                        stop=None,
+                        # You can adjust how "creative" (i.e. true to the original reviewer's intent) chatGPT will be with it's summary be adjusting this temperature value. 0.7 is usually a safe amount
+                        temperature=0.7
+                    )
+
+                    procon = completion.choices[0].message.content
+                    proscons.append(procon)
+
+                    # Gefundene Stärken und Schwächen in einer Liste zusammenfassen 
+                combined_proscons = "\n\n".join(proscons)
+                return combined_proscons
+            summary_proscons = generate_proscons_list(all_reviews)
+
+            df_proscons = pd.DataFrame()
+            list_proscons = []
+            list_proscons.append(summary_proscons)
+            df_proscons["pros_cons"] = list_proscons
+
+            output_file_proscons = "reviews_analyzed_negative_proscons.xlsx"
+            df_proscons.to_excel(output_file_proscons, index=False)
+
+            def generate_csv(df):
+                return df.to_csv(index=False)
+            if st.download_button(label='Download Ergebnisse', data=generate_csv(df_proscons), file_name='Ergebnisse.csv', mime='text/csv'):
+                pass
+
     else:
-        place_checkboxes[place] = st.checkbox(place)
-    
-    if place_checkboxes[place]:
-        place_id = ID_MAP[place]
-        if place_id not in input_Outscraper:
-            input_Outscraper.append(place_id)
-    else:
-        place_id = ID_MAP[place]
-        if place_id in input_Outscraper:
-            input_Outscraper.remove(place_id)
+        st.write("Lade deine CSV hier hoch!")
+except Exception as e:
+    st.write("Error:", e)
 
-Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API Key an")
-client = ApiClient(api_key=Outscraper_APIKey)
 
-date_input = st.date_input('Gib das Datum an, ab dem du die Reviews exportieren willst')
-if date_input > datetime.datetime.today().date():
-    st.error('Fehler: Datum darf nicht in der Zukunft liegen!')
-else:
-    year = date_input.year
-    month = date_input.month
-    day = date_input.day
 
-my_date = datetime.datetime(year, month, day)
-timestamp = my_date.timestamp()
-timestamp = int(timestamp)
-st.session_state.timestamp = timestamp
+        
 
-submit = st.button("Submit")
-if submit: 
-    st.write("WebScraping wird durchgeführt!")
-    @st.cache_data(ttl=600)
-    def scrape_google_reviews(query, timestamp):
-        results = client.google_maps_reviews([query], sort='newest', cutoff=timestamp, reviews_limit=1, language='de')
-        return results
-
-    results = scrape_google_reviews(input_Outscraper, timestamp)
-
-    data = []
-    for place in results:
-        name = place['name']
-        for review in place.get('reviews_data', []):
-            review_text = review['review_text']
-            data.append({'name': name, 'review': review_text})
-    df = pd.DataFrame(data)
-    st.dataframe(df)
-
-    def generate_csv(df):
-        return df.to_csv(index=False)
-
-    if st.download_button(label='Download CSV', data=generate_csv(df), file_name='data.csv', mime='text/csv'):
-        pass
