@@ -9,7 +9,8 @@ from tqdm import tqdm
 import time
 import datetime
 import base64
-pip install openpyxl
+import subprocess
+subprocess.run(['pip', 'install', 'openpyxl'])
 
 st.set_page_config(
     page_title="Sentiment Analyse",
@@ -241,8 +242,8 @@ if input_method == SentimentAnalyse:
                 list_proscons.append(summary_proscons)
                 df_proscons["pros_cons"] = list_proscons
 
-                output_file_proscons = "reviews_analyzed_negative_proscons.xlsx"
-                df_proscons.to_excel(output_file_proscons, index=False)
+ #               output_file_proscons = "reviews_analyzed_negative_proscons.xlsx"
+#                df_proscons.to_excel(output_file_proscons, index=False)
 
                 def generate_csv(df):
                     return df.to_csv(index=False)
