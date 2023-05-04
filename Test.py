@@ -241,10 +241,7 @@ if input_method == SentimentAnalyse:
                 list_proscons = []
                 list_proscons.append(summary_proscons)
                 df_proscons["pros_cons"] = list_proscons
-
- #               output_file_proscons = "reviews_analyzed_negative_proscons.xlsx"
-#                df_proscons.to_excel(output_file_proscons, index=False)
-
+                st.dataframe(df_proscons)
                 def generate_csv(df):
                     return df.to_csv(index=False)
                 if st.download_button(label='Download Ergebnisse', data=generate_csv(df_proscons), file_name='Ergebnisse.csv', mime='text/csv'):
