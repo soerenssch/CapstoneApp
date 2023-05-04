@@ -9,14 +9,10 @@ from tqdm import tqdm
 import time
 import datetime
 import base64
-# import openpyxl
-
-
-
 
 st.set_page_config(
     page_title="Sentiment Analyse",
-    page_icon="🧊",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",    
 )
