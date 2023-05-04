@@ -10,13 +10,12 @@ import time
 import docx
 import datetime
 import base64
+from docx import Document
+from docx.shared import Inches
+import io
 
-
-
-st.write("Lade hier die CSV Datei hoch, die du auswerten willst.")
-try:
-    file = st.file_uploader("Upload file", type=["csv"])
-    if file is not None:
+file = st.file_uploader("Upload file", type=["csv"])
+if file is not None:
         df = pd.read_csv(file)
         df = df.dropna()
         st.dataframe(df)
@@ -34,6 +33,7 @@ try:
                 word_blocks = text.split(' ')
                 block_size = 1750
                 blocks = [' '.join(word_blocks[i:i + block_size]) for i in range(0, len(word_blocks), block_size)]
+
                 proscons = []
 
                 for block in tqdm(blocks, desc="Processing blocks", unit="block"):
@@ -49,7 +49,7 @@ try:
                         max_tokens=250,
                         n=1,
                         stop=None,
-                        # You can adjust how "creative" (i.e. true to the original reviewer's intent) chatGPT will be with it's summary be adjusting this temperature value. 0.7 is usually a safe amount
+                            # You can adjust how "creative" (i.e. true to the original reviewer's intent) chatGPT will be with it's summary be adjusting this temperature value. 0.7 is usually a safe amount
                         temperature=0.7
                     )
 
@@ -66,18 +66,24 @@ try:
             list_proscons.append(summary_proscons)
             df_proscons["pros_cons"] = list_proscons
 
-            output_file_proscons = "reviews_analyzed_negative_proscons.xlsx"
-            df_proscons.to_excel(output_file_proscons, index=False)
+            # Create Word document
+            document = Document()
+            document.add_heading("Pros and Cons Summary", level=0)
+            table = document.add_table(rows=len(df_proscons.index), cols=1)
+            for i, row in df_proscons.iterrows():
+                table.cell(i, 0).text = row["pros_cons"]
+            document.add_page_break()
 
-            def generate_csv(df):
-                return df.to_csv(index=False)
-            if st.download_button(label='Download Ergebnisse', data=generate_csv(df_proscons), file_name='Ergebnisse.csv', mime='text/csv'):
-                pass
+            # Download Word document
+            with io.BytesIO() as output:
+                document.save(output)
+                if st.download_button(label='Download', data=output.getvalue(), file_name='Ergebnisse.docx', mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
+                    pass
 
-    else:
-        st.write("Lade deine CSV hier hoch!")
-except Exception as e:
-    st.write("Error:", e)
+
+
+
+
 
 
 
