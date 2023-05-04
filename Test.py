@@ -9,8 +9,7 @@ from tqdm import tqdm
 import time
 import datetime
 import base64
-import subprocess
-subprocess.run(['pip', 'install', 'openpyxl'])
+pip install openpyxl
 
 st.set_page_config(
     page_title="Sentiment Analyse",
