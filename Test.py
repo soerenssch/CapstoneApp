@@ -210,8 +210,11 @@ if input_method == SentimentAnalyse:
             df = df.dropna()
             st.dataframe(df)
 
+
             Spalte = st.text_input("Wie heisst die Spalte, die du auswerten möchtest?")
-            
+            if not Spalte:
+                Spalte = "review"
+
             st.write("Melde dich mit dem nachfolgenden Link bei OpenAI an, um deinen API-Key zu erstellen: https://chat.openai.com/auth/login")
             OpenAI_API = st.text_input("Gib hier deinen OpenAI API Key an")
             
