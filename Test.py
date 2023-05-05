@@ -51,9 +51,10 @@ st.markdown(
 
 WebScraping = "Schritt 1: Web Scraping"
 SentimentAnalyse = "Schritt 2: Sentiment-Analyse"
+Anleitung = "Beschreibung & Anleitung"
 
 st.sidebar.title("Wähle die Inputmethode")
-input_method = st.sidebar.radio("Select an option:", (WebScraping, SentimentAnalyse))
+input_method = st.sidebar.radio("Select an option:", (WebScraping, SentimentAnalyse, Anleitung))
 
 
 # Depending on which option is selected, display the appropriate information
@@ -67,6 +68,11 @@ elif input_method == SentimentAnalyse:
     with st.sidebar:
         st.header("Beschreibung: Sentiment-Analyse")
         st.write("In diesem Schritt werden die Daten hochgeladen und ausgewertet.")
+
+elif input_method == Anleitung:
+    with st.sidebar:
+        st.header("Anleitung & Beschreibung")
+        st.write("Hier findest du einen Überblick über die Funktionsweise und die einzelnen Schritte der Sentiment-Analyse.")
 
 
 ### WebScraping
