@@ -156,7 +156,6 @@ if input_method == WebScraping:
             if place_id in input_Outscraper:
                 input_Outscraper.remove(place_id)
 
-    st.write("Melde dich mit dem nachfolgenden Link bei Outscraper an, um deinen eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
     
     date_input = st.date_input('Gib das Datum an, ab dem du die Reviews exportieren willst')
     if date_input > datetime.datetime.today().date():
@@ -171,6 +170,8 @@ if input_method == WebScraping:
     timestamp = int(timestamp)
     st.session_state.timestamp = timestamp
 
+    st.write("Melde dich mit dem nachfolgenden Link bei Outscraper an, um deinen eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
+    
     Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API Key an")
     client = ApiClient(api_key=Outscraper_APIKey)
 
@@ -281,15 +282,18 @@ Outscraper: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMm
 
 OpenAI: https://chat.openai.com/auth/login
 
+
 Schritt 1: Webscraping
 
 Innerhalb von Schritt 1, dem Webscraping, greift das Programm auf die Google-Maps Bewertungen zu und fasst sie innerhalb einer .csv („comma-seperated-values“) Datei zusammen, die du einfach in Excel öffnen kannst. Dazu musst du angeben, von welchen Standorten du die Exporte benötigst und ab welchem Zeitpunkt. Abschliessend wird noch dein API-Key benötigt. Je nach Anzahl der Standorte und Zeitraum dauert das Scrapen dann wenige Sekunden bis einige Minuten. Das Ergebnis kannst du dann ganz einfach downloaden, um es entweder manuell zu betrachten oder im zweiten Schritt zu analysieren. 
+
 
 Schritt 2: Sentiment Analyse
 
 Hier lädst du zunächst die .csv Datei hoch, die du auswerten möchtest. Das Modell ist darauf ausgerichtet, die im ersten Schritt gescrapten Daten zu analysieren, jedoch ist es auch möglich, andere Datensätze zu analysieren. Dabei ist wichtig, dass alle Texte in der gleichen Spalte sind, da sie sonst für die Analyse nicht erfasst werden. Nach dem Upload der Daten musst du angeben, wie die Spalte heisst, die ausgewertet werden soll. Die Spalte der in Schritt 1 exportierten Daten heisst immer „review“, jedoch kann dies bei eigenen Datensätzen abweichen. Abschliessend muss auch hier wieder der passende API-Key angegeben werden. Die Auswertung dauert je nach Grösse des Datensatzes dann wieder einige Sekunden bis Minuten. Das Ergebnis kannst du dann einfach als Word-Datei downloaden, in der die Stärken und Schwächen bzw. positiven und negativen Aspekte der Bewertungen aufgelistet sind.
 """)
     
+
     st.write("Bei Fragen oder Anregungen kannst du dich gerne bei mir melden:")
 
 
