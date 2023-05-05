@@ -129,8 +129,6 @@ def update_selection(ID_MAP, checkbox_states, key):
 
 if input_method == WebScraping:
     st.write("Mithilfe von Webscraping werden ab einem ausgewählten Zeitpunkt alle Google Reviews der gewählten Standorte zum Download bereitgestellt.")
-    st.write("Melde dich mit dem nachfolgenden Link bei Outscraper an, um dir deinen eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
-
 
 
     select_all = st.checkbox("Alle Standorte auswählen")
@@ -152,6 +150,7 @@ if input_method == WebScraping:
             if place_id in input_Outscraper:
                 input_Outscraper.remove(place_id)
 
+    st.write("Melde dich mit dem nachfolgenden Link bei Outscraper an, um deinen eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
 
     Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API Key an")
     client = ApiClient(api_key=Outscraper_APIKey)
@@ -203,7 +202,7 @@ if input_method == SentimentAnalyse:
             df = df.dropna()
             st.dataframe(df)
 
-
+            st.write("Melde dich mit dem nachfolgenden Link bei OpenAI an, um deinen API-Key zu erstellen: https://chat.openai.com/auth/login")
             OpenAI_API = st.text_input("Gib hier deinen OpenAI API Key an")
             openai.api_key = OpenAI_API
             GPT_API_URL = "https://api.openai.com/v1/chat/completions"
