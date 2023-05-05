@@ -129,7 +129,10 @@ def update_selection(ID_MAP, checkbox_states, key):
 
 if input_method == WebScraping:
     st.write("Mithilfe von Webscraping werden ab einem ausgewählten Zeitpunkt alle Google Reviews der gewählten Standorte zum Download bereitgestellt.")
-    
+    st.write("Melde dich mit dem nachfolgenden Link bei Outscraper an, um dir deinen eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
+
+
+
     select_all = st.checkbox("Alle Standorte auswählen")
 
     place_checkboxes = {}
