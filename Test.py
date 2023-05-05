@@ -1,5 +1,8 @@
+import pickle
+from pathlib import Path
 import streamlit as st
 from streamlit_option_menu import option_menu
+import streamlit_authenticator as stauth
 from outscraper import ApiClient
 import pandas as pd
 import os
@@ -14,6 +17,7 @@ subprocess.run(['pip', 'install', 'openpyxl'])
 from docx import Document
 from docx.shared import Inches
 import io
+
 
 st.set_page_config(
     page_title="Sentiment Analyse",
@@ -44,7 +48,6 @@ st.markdown(
     '<div class="footer">© 2023 Capstone Gruppe Research. All rights reserved.</div>',
     unsafe_allow_html=True,
 )
-
 
 
 WebScraping = "Schritt 1: Web Scraping"
@@ -147,7 +150,6 @@ if input_method == WebScraping:
             if place_id in input_Outscraper:
                 input_Outscraper.remove(place_id)
 
-    st.write(input_Outscraper)
 
     Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API Key an")
     client = ApiClient(api_key=Outscraper_APIKey)
