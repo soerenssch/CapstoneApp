@@ -51,7 +51,7 @@ st.markdown(
 
 WebScraping = "Schritt 1: Web Scraping"
 SentimentAnalyse = "Schritt 2: Sentiment-Analyse"
-Anleitung = "Beschreibung & Anleitung"
+Anleitung = "Beschreibung & Kontakt"
 
 st.sidebar.title("Wähle die Inputmethode")
 input_method = st.sidebar.radio("Select an option:", (WebScraping, SentimentAnalyse, Anleitung))
@@ -71,8 +71,7 @@ elif input_method == SentimentAnalyse:
 
 elif input_method == Anleitung:
     with st.sidebar:
-        st.header("Anleitung & Beschreibung")
-        st.write("Hier findest du einen Überblick über die Funktionsweise und die einzelnen Schritte der Sentiment-Analyse.")
+        st.write("Hier findest du einen Überblick über die Funktionsweise und die einzelnen Schritte der Sentiment-Analyse. Ausserdem ein Kontaktformular, solltest du Fragen haben.")
 
 
 ### WebScraping
@@ -274,27 +273,44 @@ if input_method == SentimentAnalyse:
                         pass
 
 if input_method == Anleitung:
-    st.title("Anleitung & Beschreibung")
+    st.title("Beschreibung & Kontakt")
     st.write("""Um das Tool optimal nutzen zu können, musst du dir bei Outscraper und OpenAI einen Account anlegen und einen API-Key erstellen. Gib deinen Key nicht an Dritte weiter! 
     Die Links zur Anmeldung findest du hier:
 
-\n\nOutscraper: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm
+    \n\nOutscraper: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm
 
-\n\nOpenAI: https://chat.openai.com/auth/login
-
-
-\n\n\n\nSchritt 1: Webscraping
-
-\n\nInnerhalb von Schritt 1, dem Webscraping, greift das Programm auf die Google-Maps Bewertungen zu und fasst sie innerhalb einer .csv („comma-seperated-values“) Datei zusammen, die du einfach in Excel öffnen kannst. Dazu musst du angeben, von welchen Standorten du die Exporte benötigst und ab welchem Zeitpunkt. Abschliessend wird noch dein API-Key benötigt. Je nach Anzahl der Standorte und Zeitraum dauert das Scrapen dann wenige Sekunden bis einige Minuten. Das Ergebnis kannst du dann ganz einfach downloaden, um es entweder manuell zu betrachten oder im zweiten Schritt zu analysieren. 
+    \n\nOpenAI: https://chat.openai.com/auth/login
 
 
-\n\n\n\nSchritt 2: Sentiment Analyse
+    \n\n\n\nSchritt 1: Webscraping
 
-\n\nHier lädst du zunächst die .csv Datei hoch, die du auswerten möchtest. Das Modell ist darauf ausgerichtet, die im ersten Schritt gescrapten Daten zu analysieren, jedoch ist es auch möglich, andere Datensätze zu analysieren. Dabei ist wichtig, dass alle Texte in der gleichen Spalte sind, da sie sonst für die Analyse nicht erfasst werden. Nach dem Upload der Daten musst du angeben, wie die Spalte heisst, die ausgewertet werden soll. Die Spalte der in Schritt 1 exportierten Daten heisst immer „review“, jedoch kann dies bei eigenen Datensätzen abweichen. Abschliessend muss auch hier wieder der passende API-Key angegeben werden. Die Auswertung dauert je nach Grösse des Datensatzes dann wieder einige Sekunden bis Minuten. Das Ergebnis kannst du dann einfach als Word-Datei downloaden, in der die Stärken und Schwächen bzw. positiven und negativen Aspekte der Bewertungen aufgelistet sind.
-""")
+    \n\nInnerhalb von Schritt 1, dem Webscraping, greift das Programm auf die Google-Maps Bewertungen zu und fasst sie innerhalb einer .csv („comma-seperated-values“) Datei zusammen, die du einfach in Excel öffnen kannst. Dazu musst du angeben, von welchen Standorten du die Exporte benötigst und ab welchem Zeitpunkt. Abschliessend wird noch dein API-Key benötigt. Je nach Anzahl der Standorte und Zeitraum dauert das Scrapen dann wenige Sekunden bis einige Minuten. Das Ergebnis kannst du dann ganz einfach downloaden, um es entweder manuell zu betrachten oder im zweiten Schritt zu analysieren. 
+
+
+    \n\n\n\nSchritt 2: Sentiment Analyse
+
+    \n\nHier lädst du zunächst die .csv Datei hoch, die du auswerten möchtest. Das Modell ist darauf ausgerichtet, die im ersten Schritt gescrapten Daten zu analysieren, jedoch ist es auch möglich, andere Datensätze zu analysieren. Dabei ist wichtig, dass alle Texte in der gleichen Spalte sind, da sie sonst für die Analyse nicht erfasst werden. Nach dem Upload der Daten musst du angeben, wie die Spalte heisst, die ausgewertet werden soll. Die Spalte der in Schritt 1 exportierten Daten heisst immer „review“, jedoch kann dies bei eigenen Datensätzen abweichen. Abschliessend muss auch hier wieder der passende API-Key angegeben werden. Die Auswertung dauert je nach Grösse des Datensatzes dann wieder einige Sekunden bis Minuten. Das Ergebnis kannst du dann einfach als Word-Datei downloaden, in der die Stärken und Schwächen bzw. positiven und negativen Aspekte der Bewertungen aufgelistet sind.
+    """)
     
 
-    st.write("\n\n\n\nBei Fragen oder Anregungen kannst du dich gerne bei mir melden:")
+    st.header("Kontaktformular")
+
+    contact_form = """
+    <form action="https://formsubmit.co/soeren.schlisske@web.de" method="POST">
+        <input type="text" name="name" placeholder="Dein Name" required>
+        <input type="email" name="email" placeholder="Deine Email" required>
+        <textarea name="message" placeholder="Deine Nachricht"></textarea>
+        <button type="submit">Send</button>
+    </form>
+    """
+
+    st.markdown(contact_form, unsafe_allow_html=True)
+
+    def local_css(file_name):
+        with open(file_name) as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+    local_css("style/style.css")
 
 
    

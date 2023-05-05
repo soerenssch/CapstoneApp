@@ -52,3 +52,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+
+st.header("Kontaktformular")
+
+contact_form = """
+<form action="https://formsubmit.co/soeren.schlisske@web.de" method="POST">
+     <input type="text" name="name" placeholder="Dein Name" required>
+     <input type="email" name="email" placeholder="Deine Email" required>
+     <textarea name="message" placeholder="Deine Nachricht"></textarea>
+     <button type="submit">Send</button>
+</form>
+"""
+
+st.markdown(contact_form, unsafe_allow_html=True)
+
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+local_css("style/style.css")
