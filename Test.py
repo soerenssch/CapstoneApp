@@ -157,10 +157,7 @@ if input_method == WebScraping:
                 input_Outscraper.remove(place_id)
 
     st.write("Melde dich mit dem nachfolgenden Link bei Outscraper an, um deinen eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
-
-    Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API Key an")
-    client = ApiClient(api_key=Outscraper_APIKey)
-
+    
     date_input = st.date_input('Gib das Datum an, ab dem du die Reviews exportieren willst')
     if date_input > datetime.datetime.today().date():
         st.error('Fehler: Datum darf nicht in der Zukunft liegen!')
@@ -173,6 +170,11 @@ if input_method == WebScraping:
     timestamp = my_date.timestamp()
     timestamp = int(timestamp)
     st.session_state.timestamp = timestamp
+
+    Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API Key an")
+    client = ApiClient(api_key=Outscraper_APIKey)
+
+    
 
     submit = st.button("Submit")
     if submit: 
@@ -208,11 +210,13 @@ if input_method == SentimentAnalyse:
             df = df.dropna()
             st.dataframe(df)
 
+            Spalte = st.text_input("Wie heisst die Spalte, die du auswerten möchtest?")
+            
             st.write("Melde dich mit dem nachfolgenden Link bei OpenAI an, um deinen API-Key zu erstellen: https://chat.openai.com/auth/login")
             OpenAI_API = st.text_input("Gib hier deinen OpenAI API Key an")
+            
             openai.api_key = OpenAI_API
             GPT_API_URL = "https://api.openai.com/v1/chat/completions"
-            Spalte = st.text_input("Wie heisst die Spalte, die du auswerten möchtest?")
             all_reviews = "\n".join(df[Spalte].tolist())
             if st.button("Sentiment-Analyse starten"):
 
@@ -268,75 +272,20 @@ if input_method == SentimentAnalyse:
                     if st.download_button(label='Download', data=output.getvalue(), file_name='Ergebnisse.docx', mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
                         pass
 
+if input_method == Anleitung:
+    st.title("Anleitung & Beschreibung")
+    st.write("""Um das Tool optimal nutzen zu können, musst du dir bei Outscraper und OpenAI einen Account anlegen und einen API-Key erstellen. Gib deinen Key nicht an Dritte weiter! Die Links zur Anmeldung findest du hier:
+Outscraper: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm
+OpenAI: https://chat.openai.com/auth/login
+
+Schritt 1: Webscraping
+Innerhalb von Schritt 1, dem Webscraping, greift das Programm auf die Google-Maps Bewertungen zu und fasst sie innerhalb einer .csv („comma-seperated-values“) Datei zusammen, die du einfach in Excel öffnen kannst. Dazu musst du angeben, von welchen Standorten du die Exporte benötigst und ab welchem Zeitpunkt. Abschliessend wird noch dein API-Key benötigt. Je nach Anzahl der Standorte und Zeitraum dauert das Scrapen dann wenige Sekunden bis einige Minuten. Das Ergebnis kannst du dann ganz einfach downloaden, um es entweder manuell zu betrachten oder im zweiten Schritt zu analysieren. 
+
+Schritt 2: Sentiment Analyse
+Hier lädst du zunächst die .csv Datei hoch, die du auswerten möchtest. Das Modell ist darauf ausgerichtet, die im ersten Schritt gescrapten Daten zu analysieren, jedoch ist es auch möglich, andere Datensätze zu analysieren. Dabei ist wichtig, dass alle Texte in der gleichen Spalte sind, da sie sonst für die Analyse nicht erfasst werden. Nach dem Upload der Daten musst du angeben, wie die Spalte heisst, die ausgewertet werden soll. Die Spalte der in Schritt 1 exportierten Daten heisst immer „review“, jedoch kann dies bei eigenen Datensätzen abweichen. Abschliessend muss auch hier wieder der passende API-Key angegeben werden. Die Auswertung dauert je nach Grösse des Datensatzes dann wieder einige Sekunden bis Minuten. Das Ergebnis kannst du dann einfach als Word-Datei downloaden, in der die Stärken und Schwächen bzw. positiven und negativen Aspekte der Bewertungen aufgelistet sind.
+""")
+    
+    st.write("Bei Fragen oder Anregungen kannst du dich gerne bei mir melden:")
 
 
-
-    # st.write("Lade hier die CSV Datei hoch, die du auswerten willst.")
-    # try:
-    #     file = st.file_uploader("Upload file", type=["csv"])
-    #     if file is not None:
-    #         df = pd.read_csv(file)
-    #         df = df.dropna()
-    #         st.dataframe(df)
-
-
-    #         OpenAI_API = st.text_input("Gib hier deinen OpenAI API Key an")
-    #         openai.api_key = OpenAI_API
-    #         GPT_API_URL = "https://api.openai.com/v1/chat/completions"
-
-    #         Spalte = st.text_input("Wie heisst die Spalte, die du auswerten möchtest?")
-    #         all_reviews = "\n".join(df[Spalte].tolist())
-    #         if st.button("Sentiment-Analyse starten"):
-
-    #             @st.cache_data(ttl=600)
-    #             def generate_proscons_list(text):
-    #                 word_blocks = text.split(' ')
-    #                 block_size = 1750
-    #                 blocks = [' '.join(word_blocks[i:i + block_size]) for i in range(0, len(word_blocks), block_size)]
-
-    #                 proscons = []
-
-    #                 for block in tqdm(blocks, desc="Processing blocks", unit="block"):
-    #                     messages = [
-    #                         {"role": "system", "content": "Du bist ein KI-Sprachmodell, das darauf trainiert ist, eine Liste der häufigsten Stärken und Schwächen einer Tierarztpraxis auf der Grundlage von Google Bewertungen zu erstellen."},
-    #                         {"role": "user", "content": f"Erstelle auf der Grundlage der folgenden Google-Bewertungen eine Liste mit den häufigsten Stärken und Schwächen der Tierarztpraxis: {block}"}
-    #                     ]
-
-    #                     completion = openai.ChatCompletion.create(
-    #                         model="gpt-3.5-turbo",
-    #                         messages=messages,
-    #                         # You can change the max_tokens amount to increase or decrease the length of the results pros and cons list. If you increase it too much, you will exceed chatGPT's limits though.
-    #                         max_tokens=250,
-    #                         n=1,
-    #                         stop=None,
-    #                         # You can adjust how "creative" (i.e. true to the original reviewer's intent) chatGPT will be with it's summary be adjusting this temperature value. 0.7 is usually a safe amount
-    #                         temperature=0.7
-    #                     )
-
-    #                     procon = completion.choices[0].message.content
-    #                     proscons.append(procon)
-
-    #                 # Gefundene Stärken und Schwächen in einer Liste zusammenfassen 
-    #                 combined_proscons = "\n\n".join(proscons)
-    #                 return combined_proscons
-    #             summary_proscons = generate_proscons_list(all_reviews)
-
-    #             df_proscons = pd.DataFrame()
-    #             list_proscons = []
-    #             list_proscons.append(summary_proscons)
-    #             df_proscons["pros_cons"] = list_proscons
-    #             st.dataframe(df_proscons)
-    #             def generate_csv(df):
-    #                 return df.to_csv(index=False)
-    #             if st.download_button(label='Download Ergebnisse', data=generate_csv(df_proscons), file_name='Ergebnisse.csv', mime='text/csv'):
-    #                 pass
-
-    #     else:
-    #         st.write("Lade deine CSV hier hoch!")
-    # except Exception as e:
-    #     st.write("Error:", e)
-
-
-
-        
-
+   
