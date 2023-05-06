@@ -54,7 +54,7 @@ SentimentAnalyse = "Schritt 2: Sentiment-Analyse"
 Anleitung = "Beschreibung & Kontakt"
 
 st.sidebar.title("Wähle die Inputmethode")
-input_method = st.sidebar.radio("Select an option:", (WebScraping, SentimentAnalyse, Anleitung))
+input_method = st.sidebar.radio("Wähle eine Option:", (WebScraping, SentimentAnalyse, Anleitung))
 
 
 # Depending on which option is selected, display the appropriate information
@@ -176,7 +176,7 @@ if input_method == WebScraping:
 
     
 
-    submit = st.button("Submit")
+    submit = st.button("Webscraping durchführen")
     if submit: 
         st.write("WebScraping wird durchgeführt!")
         @st.cache_data(ttl=600)
@@ -204,7 +204,7 @@ if input_method == WebScraping:
 
 ### SentimentAnalyse  
 if input_method == SentimentAnalyse:
-    file = st.file_uploader("Upload file", type=["csv"])
+    file = st.file_uploader("Datei hochladen", type=["csv"])
     if file is not None:
             df = pd.read_csv(file)
             df = df.dropna()
@@ -263,7 +263,7 @@ if input_method == SentimentAnalyse:
 
                 # Create Word document
                 document = Document()
-                document.add_heading("Pros and Cons Summary", level=0)
+                document.add_heading("Stärken und Schwächen Zusammenfassung", level=0)
                 table = document.add_table(rows=len(df_proscons.index), cols=1)
                 for i, row in df_proscons.iterrows():
                     table.cell(i, 0).text = row["pros_cons"]
