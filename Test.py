@@ -181,7 +181,7 @@ if input_method == WebScraping:
         st.write("WebScraping wird durchgeführt!")
         @st.cache_data(ttl=600)
         def scrape_google_reviews(query, timestamp):
-            results = client.google_maps_reviews([query], sort='newest', cutoff=timestamp, reviews_limit=100, language='de')
+            results = client.google_maps_reviews([query], sort='newest', cutoff=timestamp, reviews_limit=1000, language='de')
             return results
 
 
