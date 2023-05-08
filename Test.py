@@ -61,17 +61,17 @@ input_method = st.sidebar.radio("Wähle eine Option:", (WebScraping, SentimentAn
 if input_method == WebScraping:
     with st.sidebar:
         st.header("Beschreibung: Web Scraping")
-        st.write("Im ersten Schritt werden die Reviews der verschiedenen Standorte dir per Web Scraping zum Download zur Verfügung gestellt.")
+        st.write("Im ersten Schritt werden dir die Reviews der jeweils ausgewählten Standorte per Web Scraping zum Download zur Verfügung gestellt.")
         # Add any additional information or instructions for this option
 
 elif input_method == SentimentAnalyse:
     with st.sidebar:
         st.header("Beschreibung: Sentiment-Analyse")
-        st.write("In diesem Schritt werden die Daten hochgeladen und ausgewertet.")
+        st.write("In diesem Schritt werden die zuvor gescrapten Reviews hochgeladen und ausgewertet.")
 
 elif input_method == Anleitung:
     with st.sidebar:
-        st.write("Hier findest du einen Überblick über die Funktionsweise und die einzelnen Schritte der Sentiment-Analyse. Ausserdem ein Kontaktformular, solltest du Fragen haben.")
+        st.write("Hier findest du einen Überblick über die Funktionsweise sowie die einzelnen Schritte der Sentiment-Analyse. Zusätzlich liegt ein Kontaktformular vor, solltest du auftretende Fragen haben.")
 
 
 ### WebScraping
@@ -133,7 +133,7 @@ def update_selection(ID_MAP, checkbox_states, key):
     return checkbox_states
 
 if input_method == WebScraping:
-    st.write("Mithilfe von Webscraping werden ab einem ausgewählten Zeitpunkt alle Google Reviews der gewählten Standorte zum Download bereitgestellt.")
+    st.write("Mithilfe von Web Scraping werden ab einem ausgewählten Zeitpunkt alle Google Reviews der gewählten Standorte zum Download bereitgestellt. Bitte wähle die Standorte aus, die dich interessieren.")
 
 
     select_all = st.checkbox("Alle Standorte auswählen")
@@ -156,7 +156,7 @@ if input_method == WebScraping:
                 input_Outscraper.remove(place_id)
 
     
-    date_input = st.date_input('Gib das Datum an, ab dem du die Reviews exportieren willst')
+    date_input = st.date_input('Gib das Datum an, ab dem du die Reviews exportieren willst:')
     if date_input > datetime.datetime.today().date():
         st.error('Fehler: Datum darf nicht in der Zukunft liegen!')
     else:
@@ -171,14 +171,14 @@ if input_method == WebScraping:
 
     st.write("Melde dich mit dem nachfolgenden Link bei Outscraper an, um deinen eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
     
-    Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API Key an")
+    Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API-Key an:")
     client = ApiClient(api_key=Outscraper_APIKey)
 
     
 
-    submit = st.button("Webscraping durchführen")
+    submit = st.button("Web Scraping durchführen")
     if submit: 
-        st.write("WebScraping wird durchgeführt!")
+        st.write("Web Scraping wird durchgeführt!")
         @st.cache_data(ttl=600)
         def scrape_google_reviews(query, timestamp):
             results = client.google_maps_reviews([query], sort='newest', cutoff=timestamp, reviews_limit=1000, language='de')
@@ -204,7 +204,7 @@ if input_method == WebScraping:
 
 ### SentimentAnalyse  
 if input_method == SentimentAnalyse:
-    file = st.file_uploader("Datei hochladen", type=["csv"])
+    file = st.file_uploader("Lade deine Datei hier hoch:", type=["csv"])
     if file is not None:
             df = pd.read_csv(file)
             df = df.dropna()
@@ -216,7 +216,7 @@ if input_method == SentimentAnalyse:
                 Spalte = "review"
 
             st.write("Melde dich mit dem nachfolgenden Link bei OpenAI an, um deinen API-Key zu erstellen: https://chat.openai.com/auth/login")
-            OpenAI_API = st.text_input("Gib hier deinen OpenAI API Key an")
+            OpenAI_API = st.text_input("Gib hier deinen OpenAI API-Key an:")
             
             openai.api_key = OpenAI_API
             GPT_API_URL = "https://api.openai.com/v1/chat/completions"
@@ -277,7 +277,7 @@ if input_method == SentimentAnalyse:
 
 if input_method == Anleitung:
     st.title("Beschreibung & Kontakt")
-    st.write("""Um das Tool optimal nutzen zu können, musst du dir bei Outscraper und OpenAI einen Account anlegen und einen API-Key erstellen. Gib deinen Key nicht an Dritte weiter! 
+    st.write("""Um das Tool optimal nutzen zu können, musst du dir bei Outscraper und OpenAI einen Account anlegen und einen API-Key erstellen. WICHTIG: Gib deinen Key nicht an Dritte weiter! 
     Die Links zur Anmeldung findest du hier:
 
     \n\nOutscraper: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm
@@ -285,15 +285,13 @@ if input_method == Anleitung:
     \n\nOpenAI: https://chat.openai.com/auth/login
 
 
-    \n\n\n\nSchritt 1: Webscraping
+    \n\n\n\nSchritt 1: Web Scraping
 
-    \n\nInnerhalb von Schritt 1, dem Webscraping, greift das Programm auf die Google-Maps Bewertungen zu und fasst sie innerhalb einer .csv („comma-seperated-values“) Datei zusammen, die du einfach in Excel öffnen kannst. Dazu musst du angeben, von welchen Standorten du die Exporte benötigst und ab welchem Zeitpunkt. Abschliessend wird noch dein API-Key benötigt. Je nach Anzahl der Standorte und Zeitraum dauert das Scrapen dann wenige Sekunden bis einige Minuten. Das Ergebnis kannst du dann ganz einfach downloaden, um es entweder manuell zu betrachten oder im zweiten Schritt zu analysieren. 
-
+    \n\nIm ersten Schritt, dem sogenannten Web Scraping, greift das Programm einleitend auf die Google-Maps Bewertungen der VetTrust zu und fasst diese innerhalb einer „.csv (comma-seperated-values)“-Datei zusammen, welche zentral über das Programm Excel geöffnet werden kann. Um die relevanten Daten zu erhalten, muss zudem angegeben werden, von welchem Standort und ab welchem Zeitraum die Exporte benötigt werden. Darüber hinaus wird der zuvor erstellte API-Key benötigt, um das Web Scraping endgültig durchzuführen. Je nach Anzahl der Standorte sowie dem ausgewählten Zeitraum dauert diese Applikation wenige Sekunden bis einige Minuten. Das Ergebnis kann abschliessend heruntergeladen werden, um es entweder manuell zu betrachten oder im zweiten Schritt näher zu analysieren.“
 
     \n\n\n\nSchritt 2: Sentiment Analyse
 
-    \n\nHier lädst du zunächst die .csv Datei hoch, die du auswerten möchtest. Das Modell ist darauf ausgerichtet, die im ersten Schritt gescrapten Daten zu analysieren, jedoch ist es auch möglich, andere Datensätze zu analysieren. Dabei ist wichtig, dass alle Texte in der gleichen Spalte sind, da sie sonst für die Analyse nicht erfasst werden. Nach dem Upload der Daten musst du angeben, wie die Spalte heisst, die ausgewertet werden soll. Die Spalte der in Schritt 1 exportierten Daten heisst immer „review“, jedoch kann dies bei eigenen Datensätzen abweichen. Abschliessend muss auch hier wieder der passende API-Key angegeben werden. Die Auswertung dauert je nach Grösse des Datensatzes dann wieder einige Sekunden bis Minuten. Das Ergebnis kannst du dann einfach als Word-Datei downloaden, in der die Stärken und Schwächen bzw. positiven und negativen Aspekte der Bewertungen aufgelistet sind.
-    """)
+    \n\nZu Beginn des zweiten Schrittes wird die im vorherigen Schritt heruntergeladene .csv-Datei, die nun ausgewertet werden soll, wieder hochgeladen. Das Modell analysiert dabei die Texte auf positive und negative Aspekte, weshalb auch eigene Datensätze mit gleichem Format verwendet werden können. Zu beachten ist, dass alle Textausschnitte in derselben Spalte vorliegen müssen, da diese sonst nicht für die Analyse erfasst werden können. Um die Analyse durchzuführen, muss nach Upload der Daten zusätzlich der Name der Spalte angegeben werden, die nachfolgend ausgewertet werden soll. Die auszuwertende Spalte, der in Schritt 1 exportierten Daten ist immer durch den Namen „review“ gekennzeichnet, was jedoch bei eigenen Datensätzen abweichen kann. Abschliessend muss auch hier wieder der passende API-Key angegeben werden. In Abhängigkeit der Grösse des jeweiligen Datensatzes kann die Analyse einige Sekunden bis wenige Minuten dauern. Das endgültige Ergebnis kann dann als Word-Datei heruntergeladen werden, in der die Stärken und Schwächen respektive positiven und negativen Aspekte der Bewertungen übersichtlich aufgelistet sind.""")
     
 
     st.header("Kontaktformular")
@@ -301,9 +299,9 @@ if input_method == Anleitung:
     contact_form = """
     <form action="https://formsubmit.co/soeren.schlisske@web.de" method="POST">
         <input type="text" name="name" placeholder="Dein Name" required>
-        <input type="email" name="email" placeholder="Deine Email" required>
+        <input type="email" name="email" placeholder="Deine Email-Adresse" required>
         <textarea name="message" placeholder="Deine Nachricht"></textarea>
-        <button type="submit">Send</button>
+        <button type="submit">Senden</button>
     </form>
     """
 
