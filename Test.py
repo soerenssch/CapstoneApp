@@ -19,7 +19,7 @@ import io
 
 
 st.set_page_config(
-    page_title="Sentiment Analyse",
+    page_title="Sentiment-Analyse",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",    
@@ -289,7 +289,7 @@ if input_method == Anleitung:
 
     \n\nIm ersten Schritt, dem sogenannten Web Scraping, greift das Programm einleitend auf die Google-Maps Bewertungen der VetTrust zu und fasst diese innerhalb einer „.csv (comma-seperated-values)“-Datei zusammen, welche zentral über das Programm Excel geöffnet werden kann. Um die relevanten Daten zu erhalten, muss zudem angegeben werden, von welchem Standort und ab welchem Zeitraum die Exporte benötigt werden. Darüber hinaus wird der zuvor erstellte API-Key benötigt, um das Web Scraping endgültig durchzuführen. Je nach Anzahl der Standorte sowie dem ausgewählten Zeitraum dauert diese Applikation wenige Sekunden bis einige Minuten. Das Ergebnis kann abschliessend heruntergeladen werden, um es entweder manuell zu betrachten oder im zweiten Schritt näher zu analysieren.“
 
-    \n\n\n\nSchritt 2: Sentiment Analyse
+    \n\n\n\nSchritt 2: Sentiment-Analyse
 
     \n\nZu Beginn des zweiten Schrittes wird die im vorherigen Schritt heruntergeladene .csv-Datei, die nun ausgewertet werden soll, wieder hochgeladen. Das Modell analysiert dabei die Texte auf positive und negative Aspekte, weshalb auch eigene Datensätze mit gleichem Format verwendet werden können. Zu beachten ist, dass alle Textausschnitte in derselben Spalte vorliegen müssen, da diese sonst nicht für die Analyse erfasst werden können. Um die Analyse durchzuführen, muss nach Upload der Daten zusätzlich der Name der Spalte angegeben werden, die nachfolgend ausgewertet werden soll. Die auszuwertende Spalte, der in Schritt 1 exportierten Daten ist immer durch den Namen „review“ gekennzeichnet, was jedoch bei eigenen Datensätzen abweichen kann. Abschliessend muss auch hier wieder der passende API-Key angegeben werden. In Abhängigkeit der Grösse des jeweiligen Datensatzes kann die Analyse einige Sekunden bis wenige Minuten dauern. Das endgültige Ergebnis kann dann als Word-Datei heruntergeladen werden, in der die Stärken und Schwächen respektive positiven und negativen Aspekte der Bewertungen übersichtlich aufgelistet sind.""")
     
