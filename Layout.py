@@ -20,29 +20,10 @@ import io
 from io import BytesIO
 import matplotlib.pyplot as plt
 
-
-# file = st.file_uploader("Lade deine Datei hier hoch:", type=["csv"])
-# if file is not None:
-#     df = pd.read_csv(file)
-#     df = df.dropna()
-#     st.dataframe(df)
-
-#     fig, ax = plt.subplots(figsize=(12, 8))
-#     counts, bins, patches = ax.hist(df['rating'], bins=5, color='#132f55', edgecolor='white')
-#     ax.set_xlabel('Bewertung')
-#     ax.set_ylabel('Anzahl')
-#     ax.set_title('Verteilung der Bewertungen')
-#     tick_labels = ['1 Stern', '2 Sterne', '3 Sterne', '4 Sterne', '5 Sterne']
-#     tick_positions = [1.415, 2.25, 3, 3.85, 4.63]
-#     ax.set_xticks(tick_positions)
-#     ax.set_xticklabels(tick_labels, ha='center') # Set horizontal alignment to center
-
-#     st.pyplot(fig)
-
 # Create a function to generate the plot
 def generate_plot(df):
     fig, ax = plt.subplots(figsize=(12, 8))
-    counts, bins, patches = ax.hist(df['rating'], bins=5, color='#132f55', edgecolor='white')
+    counts, bins, patches = ax.hist(df['Rating'], bins=5, color='#132f55', edgecolor='white')
     ax.set_xlabel('Bewertung')
     ax.set_ylabel('Anzahl')
     ax.set_title('Verteilung der Bewertungen')
@@ -64,6 +45,15 @@ file = st.file_uploader("Lade deine Datei hier hoch:", type=["csv"])
 if file is not None:
     df = pd.read_csv(file)
     df = df.dropna()
+    df["Datum"] = pd.to_datetime(df["Datum"])
+
+    start_date = st.date_input("Start der Auswertung:", value=pd.to_datetime(df['Datum']).min().date())
+    end_date = st.date_input("Ende der Auswertung:", value=pd.to_datetime(df['Datum']).max().date())
+
+    # Filter the dataframe based on the date range
+    mask = (pd.to_datetime(df['Datum']).dt.date >= start_date) & (pd.to_datetime(df['Datum']).dt.date <= end_date)
+    df = df.loc[mask]
+
     st.dataframe(df)
 
     # Generate the plot
@@ -82,10 +72,12 @@ if file is not None:
     st.pyplot(fig)
 
 
+
+
     
     Spalte = st.text_input("Wie heisst die Spalte, die du auswerten möchtest?")
     if not Spalte:
-        Spalte = "review"
+        Spalte = "Review"
 
     st.write("Melde dich mit dem nachfolgenden Link bei OpenAI an, um deinen API-Key zu erstellen: https://chat.openai.com/auth/login")
     OpenAI_API = st.text_input("Gib hier deinen OpenAI API-Key an:")
