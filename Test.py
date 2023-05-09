@@ -235,6 +235,8 @@ if input_method == SentimentAnalyse:
     if file is not None:
         df = pd.read_csv(file)
         df = df.dropna()
+
+        
         df["Datum"] = pd.to_datetime(df["Datum"])
 
         start_date = st.date_input("Start der Auswertung:", value=pd.to_datetime(df['Datum']).min().date())
@@ -276,7 +278,7 @@ if input_method == SentimentAnalyse:
             @st.cache_data(ttl=600)
             def generate_proscons_list(text):
                 word_blocks = text.split(' ')
-                block_size = 1750
+                block_size = 2000
                 blocks = [' '.join(word_blocks[i:i + block_size]) for i in range(0, len(word_blocks), block_size)]
 
                 proscons = []
