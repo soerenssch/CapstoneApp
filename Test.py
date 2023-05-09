@@ -278,7 +278,7 @@ if input_method == SentimentAnalyse:
             @st.cache_data(ttl=600)
             def generate_proscons_list(text):
                 word_blocks = text.split(' ')
-                block_size = 2000
+                block_size = 2500
                 blocks = [' '.join(word_blocks[i:i + block_size]) for i in range(0, len(word_blocks), block_size)]
 
                 proscons = []
