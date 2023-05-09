@@ -195,7 +195,7 @@ if input_method == WebScraping:
                 review_text = review['review_text']
                 review_rating = review['review_rating']
                 date = review["review_datetime_utc"]
-                data.append({'Standort': name, 'Review': review_text, 'Rating': review_rating, 'Datum'})
+                data.append({'Standort': name, 'Review': review_text, 'Rating': review_rating, 'Datum': date})
         df = pd.DataFrame(data)
         st.dataframe(df)
 
