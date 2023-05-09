@@ -16,6 +16,7 @@ subprocess.run(['pip', 'install', 'openpyxl'])
 from docx import Document
 from docx.shared import Inches
 import io
+import matplotlib.pyplot as plt
 
 
 st.set_page_config(
@@ -192,9 +193,13 @@ if input_method == WebScraping:
             name = place['name']
             for review in place.get('reviews_data', []):
                 review_text = review['review_text']
-                data.append({'name': name, 'review': review_text})
+                review_rating = review['review_rating']
+                date = review["review_datetime_utc"]
+                data.append({'Standort': name, 'Review': review_text, 'Rating': review_rating, 'Datum'})
         df = pd.DataFrame(data)
         st.dataframe(df)
+
+        
 
         def generate_csv(df):
             return df.to_csv(index=False)
@@ -209,6 +214,16 @@ if input_method == SentimentAnalyse:
             df = pd.read_csv(file)
             df = df.dropna()
             st.dataframe(df)
+
+            fig, ax = plt.subplots()
+            ax.hist(df['review'], bins=5) # 5 is the number of bins in the histogram
+            ax.set_xlabel('Sterne')
+            ax.set_ylabel('Anzahl')
+            ax.set_title('Verteilung der Sterne')
+
+            # Display the histogram in streamlit
+            st.pyplot(fig)
+
 
 
             Spalte = st.text_input("Wie heisst die Spalte, die du auswerten möchtest?")
