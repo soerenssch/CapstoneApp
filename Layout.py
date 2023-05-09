@@ -20,18 +20,7 @@ import io
 from io import BytesIO
 import matplotlib.pyplot as plt
 
-# Create a function to generate the plot
-def generate_plot(df):
-    fig, ax = plt.subplots(figsize=(12, 8))
-    counts, bins, patches = ax.hist(df['Rating'], bins=5, color='#132f55', edgecolor='white')
-    ax.set_xlabel('Bewertung')
-    ax.set_ylabel('Anzahl')
-    ax.set_title('Verteilung der Bewertungen')
-    tick_labels = ['1 Stern', '2 Sterne', '3 Sterne', '4 Sterne', '5 Sterne']
-    tick_positions = [1.415, 2.25, 3, 3.85, 4.63]
-    ax.set_xticks(tick_positions)
-    ax.set_xticklabels(tick_labels, ha='center') # Set horizontal alignment to center
-    return fig
+
 
 # Define the file download function
 def download_file(file):
@@ -45,31 +34,54 @@ file = st.file_uploader("Lade deine Datei hier hoch:", type=["csv"])
 if file is not None:
     df = pd.read_csv(file)
     df = df.dropna()
-    df["Datum"] = pd.to_datetime(df["Datum"])
 
-    start_date = st.date_input("Start der Auswertung:", value=pd.to_datetime(df['Datum']).min().date())
-    end_date = st.date_input("Ende der Auswertung:", value=pd.to_datetime(df['Datum']).max().date())
+    if "Datum" in df.columns:
 
-    # Filter the dataframe based on the date range
-    mask = (pd.to_datetime(df['Datum']).dt.date >= start_date) & (pd.to_datetime(df['Datum']).dt.date <= end_date)
-    df = df.loc[mask]
+        # add checkbox to allow manual date selection
+        manual_date_selection = st.checkbox("Den Analysezeitraum manuell festlegen")
+        df["Datum"] = pd.to_datetime(df["Datum"])
+        if manual_date_selection:
+
+            
+            # start_date = st.date_input("Start date")
+            # end_date = st.date_input("End date")
+            start_date = st.date_input("Start der Auswertung:", value=pd.to_datetime(df['Datum']).min().date())
+            end_date = st.date_input("Ende der Auswertung:", value=pd.to_datetime(df['Datum']).max().date())
+
+            # mask = (df["date"] >= start_date) & (df["date"] <= end_date)
+            mask = (pd.to_datetime(df['Datum']).dt.date >= start_date) & (pd.to_datetime(df['Datum']).dt.date <= end_date)
+            df = df.loc[mask]
 
     st.dataframe(df)
 
-    # Generate the plot
-    fig = generate_plot(df)
+    if "Rating" in df.columns:
+            
+        
+        def generate_plot(df):
+            fig, ax = plt.subplots(figsize=(12, 8))
+            counts, bins, patches = ax.hist(df['Rating'], bins=5, color='#132f55', edgecolor='white')
+            ax.set_xlabel('Bewertung')
+            ax.set_ylabel('Anzahl')
+            ax.set_title('Verteilung der Bewertungen')
+            tick_labels = ['1 Stern', '2 Sterne', '3 Sterne', '4 Sterne', '5 Sterne']
+            tick_positions = [1.415, 2.25, 3, 3.85, 4.63]
+            ax.set_xticks(tick_positions)
+            ax.set_xticklabels(tick_labels, ha='center') # Set horizontal alignment to center
+            return fig
+    
+        fig = generate_plot(df)
+        st.pyplot(fig)
+        st.write(f"Die durchschnittliche Bewertung beträgt {round(df['Rating'].mean(), 2)} bei {round(df['Rating'].count(), 2)} Bewertungen")
+        
 
-    # Create the download button
-    download = download_file(fig)
-    st.download_button(
-        label='Download plot',
-        data=download,
-        file_name='plot.png',
-        mime='image/png'
-    )
-
-    # Display the plot
-    st.pyplot(fig)
+        download = download_file(fig)
+        st.download_button(
+            label='Download plot',
+            data=download,
+            file_name='plot.png',
+            mime='image/png'
+        )
+        
 
 
 
