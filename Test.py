@@ -212,7 +212,7 @@ if input_method == WebScraping:
 if input_method == SentimentAnalyse:
 
     def generate_plot(df):
-        fig, ax = plt.subplots(figsize=(12, 8))
+        fig, ax = plt.subplots(figsize=(8, 6))
         counts, bins, patches = ax.hist(df['Rating'], bins=5, color='#132f55', edgecolor='white')
         ax.set_xlabel('Bewertung')
         ax.set_ylabel('Anzahl')
