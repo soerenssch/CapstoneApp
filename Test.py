@@ -16,6 +16,7 @@ subprocess.run(['pip', 'install', 'openpyxl'])
 from docx import Document
 from docx.shared import Inches
 import io
+from io import BytesIO
 import matplotlib.pyplot as plt
 
 
