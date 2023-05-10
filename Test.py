@@ -51,12 +51,13 @@ st.markdown(
 )
 
 
-WebScraping = "Schritt 1: Web Scraping"
-SentimentAnalyse = "Schritt 2: Sentiment-Analyse"
+WebScraping = "Web Scraping"
+SentimentAnalyse = "Sentiment-Analyse"
+MitarbeiterUmfrage = "Auswertung der Mitarbeiterumfrage"
 Anleitung = "Beschreibung & Kontakt"
 
-st.sidebar.title("Wähle die Inputmethode")
-input_method = st.sidebar.radio("Wähle eine Option:", (WebScraping, SentimentAnalyse, Anleitung))
+st.sidebar.title("Analysetools:")
+input_method = st.sidebar.radio("Wähle eine Option:", (WebScraping, SentimentAnalyse, MitarbeiterUmfrage, Anleitung))
 
 
 # Depending on which option is selected, display the appropriate information
@@ -70,6 +71,11 @@ elif input_method == SentimentAnalyse:
     with st.sidebar:
         st.header("Beschreibung: Sentiment-Analyse")
         st.write("In diesem Schritt werden die zuvor gescrapten Reviews hochgeladen und ausgewertet.")
+
+elif input_method == MitarbeiterUmfrage:
+    with st.sidebar:
+        st.header("Beschreibung: Mitarbeiterumfrage")
+        st.write("XXX einfügen XXX")
 
 elif input_method == Anleitung:
     with st.sidebar:
@@ -333,6 +339,11 @@ if input_method == SentimentAnalyse:
                 document.save(output)
                 if st.download_button(label='Download', data=output.getvalue(), file_name='Ergebnisse.docx', mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
                     pass
+
+if input_method == MitarbeiterUmfrage:
+    st.title("Automatische Auswertung der standardisierten Mitarbeiterumfrage")
+    st.write("Hier hochladen")
+
 
 if input_method == Anleitung:
     st.title("Beschreibung & Kontakt")
