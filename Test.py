@@ -292,7 +292,7 @@ if input_method == SentimentAnalyse:
 
                 for block in tqdm(blocks, desc="Processing blocks", unit="block"):
                     messages = [
-                        {"role": "system", "content": "Du bist ein KI-Sprachmodell, das darauf trainiert ist, eine Liste der häufigsten Stärken und Schwächen einer Tierarztpraxis auf der Grundlage von Google Bewertungen zu erstellen."},
+                        {"role": "system", "content": "Du bist ein KI-Sprachmodell, das darauf trainiert ist, eine Liste der häufigsten Stärken und Schwächen einer Tierarztpraxis auf der Grundlage von Google Bewertungen zu erstellen. Es ist dir nicht erlaubt, über die Liste der Stärken und Schwächen hinaus einen Output zu generieren, also keine Zusammenfassung der Fragestellung oder des Ergebnisses."},
                         {"role": "user", "content": f"Erstelle auf der Grundlage der folgenden Google-Bewertungen eine Liste mit den häufigsten Stärken und Schwächen der Tierarztpraxis: {block}"}
                     ]
 
