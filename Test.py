@@ -371,72 +371,75 @@ if input_method == MitarbeiterUmfrage:
         
         df = cleaning(df)
 
-        def regressionen(df):
+        st.dataframe(df)
+
+        if st.button("Auswertung starten"):
+
+            def regressionen(df):
+                p_total = pd.DataFrame()
+                r_total = pd.DataFrame()
+                complete = pd.DataFrame()
+                today = date.today()
+                for column_x in df:
+                    p_dict = {}
+                    r_dict = {}
+                    for column_y in df:
+                        df_copy = df.dropna(subset=[column_x, column_y])
+                        x = df_copy[column_x]
+                        y = df_copy[column_y]  
+                        y = y.dropna()
+                        slope, intercept, r, p, std_err = stats.linregress(x, y)    
+                        p_dict['{} vs. {}'.format(column_x, column_y)] = p
+                        r_dict['{} vs. {}'.format(column_x, column_y)] = r 
+                    p_df = pd.DataFrame.from_dict(p_dict, orient='index')
+                    r_df = pd.DataFrame.from_dict(r_dict, orient='index')
+                    p_total = p_total.append(p_df)
+                    r_total = r_total.append(r_df)
+                r_total = r_total.reset_index()
+                p_total = p_total.reset_index()
+                r_total = r_total.rename(columns={"index": "Parameter", 0: "r"})
+                p_total = p_total.rename(columns={"index": "Parameter", 0: "p"})
+                p_total= p_total.round(6)
+                r_total= r_total.round(6)
+                r_total = r_total.drop_duplicates(subset=["r"], keep="first")
+                complete = pd.merge(r_total, p_total, on="Parameter", how="left")
+                complete = complete[complete.r != 1]
+                complete=complete.sort_values(by=['r'], ascending=False)
+                complete = complete.reset_index()
+                complete = complete.drop(columns="index")
+                # Sind alle Werte und Regressionen drin
+                complete.to_excel("Alle Regressionen {}.xlsx".format(today)) 
+                signifikant = complete[complete.p <= 0.05]
+                # Hier nur die signifikanten unter p wert von 5%
+                signifikant.to_excel("Signifikante Regressionen {}.xlsx".format(today))
+                return complete, signifikant
             
-            r_total = pd.DataFrame()
-            p_total = pd.DataFrame()
-            complete = pd.DataFrame()
-            today = date.today()
-            for column_x in df:
-                p_dict = {}
-                r_dict = {}
-                for column_y in df:
-                    df_copy = df.dropna(subset=[column_x, column_y])
-                    x = df_copy[column_x]
-                    y = df_copy[column_y]  
-                    y = y.dropna()
-                    slope, intercept, r, p, std_err = stats.linregress(x, y)    
-                    p_dict['{} vs. {}'.format(column_x, column_y)] = p
-                    r_dict['{} vs. {}'.format(column_x, column_y)] = r 
-                p_df = pd.DataFrame.from_dict(p_dict, orient='index')
-                r_df = pd.DataFrame.from_dict(r_dict, orient='index')
-                p_total = p_total.append(p_df)
-                r_total = r_total.append(r_df)
-            r_total = r_total.reset_index()
-            p_total = p_total.reset_index()
-            r_total = r_total.rename(columns={"index": "Parameter", 0: "r"})
-            p_total = p_total.rename(columns={"index": "Parameter", 0: "p"})
-            p_total= p_total.round(6)
-            r_total= r_total.round(6)
-            r_total = r_total.drop_duplicates(subset=["r"], keep="first")
-            complete = pd.merge(r_total, p_total, on="Parameter", how="left")
-            complete = complete[complete.r != 1]
-            complete=complete.sort_values(by=['r'], ascending=False)
-            complete = complete.reset_index()
-            complete = complete.drop(columns="index")
-            # Sind alle Werte und Regressionen drin
-            complete.to_excel("Alle Regressionen {}.xlsx".format(today)) 
-            signifikant = complete[complete.p <= 0.05]
-            # Hier nur die signifikanten unter p wert von 5%
-            signifikant.to_excel("Signifikante Regressionen {}.xlsx".format(today))
-            return complete, signifikant
-        
-        complete, signifikant = regressionen(df)
+            complete, signifikant = regressionen(df)
 
-        st.dataframe(signifikant)
+            st.dataframe(signifikant)
 
-        def create_plots(column_x, column_y, df):
-            x = df[column_x]
-            y = df[column_y] 
-            slope, intercept, r, p, std_err = stats.linregress(x, y)    
-            def myfunc(x):
-                return slope * x + intercept
-            mymodel = list(map(myfunc, x))
-            plt.ylim([0, 5])
-            plt.xlim([0, 5])
-            plt.scatter(x, y, color=("#132f55"))
-            plt.plot(x, mymodel,color=("#d52f89"))
-            plt.title("{} vs. {}".format(column_x, column_y))
-            plt.xlabel("{}".format(column_x))
-            plt.ylabel("{}".format(column_y))
-            plt.savefig(('{} vs {}'.format(column_x, column_y)), dpi=300)
-            plt.show()
+        # def create_plots(column_x, column_y, df):
+        #     x = df[column_x]
+        #     y = df[column_y] 
+        #     slope, intercept, r, p, std_err = stats.linregress(x, y)    
+        #     def myfunc(x):
+        #         return slope * x + intercept
+        #     mymodel = list(map(myfunc, x))
+        #     plt.ylim([0, 5])
+        #     plt.xlim([0, 5])
+        #     plt.scatter(x, y, color=("#132f55"))
+        #     plt.plot(x, mymodel,color=("#d52f89"))
+        #     plt.title("{} vs. {}".format(column_x, column_y))
+        #     plt.xlabel("{}".format(column_x))
+        #     plt.ylabel("{}".format(column_y))
+        #     plt.savefig(('{} vs {}'.format(column_x, column_y)), dpi=300)
+        #     plt.show()
 
-        x_axis = st.text_input("Welche Variable soll auf der x-Achse sein?")
-        y_axis = st.text_input("Welche Variable soll auf der y-Achse sein?")
+        # x_axis = st.text_input("Welche Variable soll auf der x-Achse sein?")
+        # y_axis = st.text_input("Welche Variable soll auf der y-Achse sein?")
 
-        if st.button("Erstelle Plot"):
-            create_plots(x-axis, y-axis, df)
+        # if st.button("Erstelle Plot"):
+        #     create_plots(x-axis, y-axis, df)
 
 
 if input_method == Anleitung:
