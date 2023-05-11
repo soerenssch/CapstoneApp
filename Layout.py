@@ -1,6 +1,5 @@
 import pickle
 from pathlib import Path
-from turtle import shapesize
 import streamlit as st
 from streamlit_option_menu import option_menu
 from outscraper import ApiClient
@@ -19,140 +18,133 @@ from docx.shared import Inches
 import io
 from io import BytesIO
 import matplotlib.pyplot as plt
+import numpy
+import scipy
+from scipy import stats
+from datetime import date
 
 
+st.title("Automatische Auswertung der standardisierten Mitarbeiterumfrage")
+st.write("Hier hochladen")
 
-# Define the file download function
-def download_file(file):
-    b = BytesIO()
-    file.savefig(b, format='png')
-    b.seek(0)
-    return b
-
-# Main code
 file = st.file_uploader("Lade deine Datei hier hoch:", type=["csv"])
 if file is not None:
     df = pd.read_csv(file)
-    df = df.dropna()
-
-    if "Datum" in df.columns:
-
-        # add checkbox to allow manual date selection
-        manual_date_selection = st.checkbox("Den Analysezeitraum manuell festlegen")
-        df["Datum"] = pd.to_datetime(df["Datum"])
-        if manual_date_selection:
-
-            
-            # start_date = st.date_input("Start date")
-            # end_date = st.date_input("End date")
-            start_date = st.date_input("Start der Auswertung:", value=pd.to_datetime(df['Datum']).min().date())
-            end_date = st.date_input("Ende der Auswertung:", value=pd.to_datetime(df['Datum']).max().date())
-
-            # mask = (df["date"] >= start_date) & (df["date"] <= end_date)
-            mask = (pd.to_datetime(df['Datum']).dt.date >= start_date) & (pd.to_datetime(df['Datum']).dt.date <= end_date)
-            df = df.loc[mask]
+    
+    def cleaning(df):
+        df = df.drop(df.columns[[0,1,15]], axis=1 )
+        df.columns.values[0] = "Wertschätzung"
+        df.columns.values[1] = "Team"
+        df.columns.values[2] = "Ausgeglichenheit"
+        df.columns.values[3] = "Zufriedenheit als Mitarbeiter"
+        df.columns.values[4] = "Weiterempfehlung als Arbeitgeber"
+        df.columns.values[5] = "Zufriedenheit der Kunden"
+        df.columns.values[6] = "Weiterempfehlung als Tierarztpraxis/-klinik"
+        df.columns.values[7] = "Kennen der Werte"
+        df.columns.values[8] = "Identifikation mit Werten"
+        df.columns.values[9] = "Anweisungen"
+        df.columns.values[10] = "Image in der CH"
+        df.columns.values[11] = "Kommunikation Head Office"
+        df.columns.values[12] = "Weiterbildungen und Karriere"
+        return df
+    
+    
 
     st.dataframe(df)
 
-    if "Rating" in df.columns:
-            
-        
-        def generate_plot(df):
-            fig, ax = plt.subplots(figsize=(12, 8))
-            counts, bins, patches = ax.hist(df['Rating'], bins=5, color='#132f55', edgecolor='white')
-            ax.set_xlabel('Bewertung')
-            ax.set_ylabel('Anzahl')
-            ax.set_title('Verteilung der Bewertungen')
-            tick_labels = ['1 Stern', '2 Sterne', '3 Sterne', '4 Sterne', '5 Sterne']
-            tick_positions = [1.415, 2.25, 3, 3.85, 4.63]
-            ax.set_xticks(tick_positions)
-            ax.set_xticklabels(tick_labels, ha='center') # Set horizontal alignment to center
-            return fig
-    
-        fig = generate_plot(df)
-        st.pyplot(fig)
-        st.write(f"Die durchschnittliche Bewertung beträgt {round(df['Rating'].mean(), 2)} bei {round(df['Rating'].count(), 2)} Bewertungen")
-        
-
-        download = download_file(fig)
-        st.download_button(
-            label='Download plot',
-            data=download,
-            file_name='plot.png',
-            mime='image/png'
-        )
-        
-
-
-
-
-    
-    Spalte = st.text_input("Wie heisst die Spalte, die du auswerten möchtest?")
-    if not Spalte:
-        Spalte = "Review"
-
-    st.write("Melde dich mit dem nachfolgenden Link bei OpenAI an, um deinen API-Key zu erstellen: https://chat.openai.com/auth/login")
-    OpenAI_API = st.text_input("Gib hier deinen OpenAI API-Key an:")
-    
-    openai.api_key = OpenAI_API
-    GPT_API_URL = "https://api.openai.com/v1/chat/completions"
-    all_reviews = "\n".join(df[Spalte].tolist())
-    if st.button("Sentiment-Analyse starten"):
+    if st.button("Auswertung starten"):
+        df = cleaning(df)
 
         @st.cache_data(ttl=600)
-        def generate_proscons_list(text):
-            word_blocks = text.split(' ')
-            block_size = 1750
-            blocks = [' '.join(word_blocks[i:i + block_size]) for i in range(0, len(word_blocks), block_size)]
+        def regressionen(df):
+            p_total = pd.DataFrame()
+            r_total = pd.DataFrame()
+            complete = pd.DataFrame()
+            today = date.today()
+            for column_x in df:
+                p_dict = {}
+                r_dict = {}
+                for column_y in df:
+                    df_copy = df.dropna(subset=[column_x, column_y])
+                    x = df_copy[column_x]
+                    y = df_copy[column_y]  
+                    y = y.dropna()
+                    slope, intercept, r, p, std_err = stats.linregress(x, y)    
+                    p_dict['{} vs. {}'.format(column_x, column_y)] = p
+                    r_dict['{} vs. {}'.format(column_x, column_y)] = r 
+                p_df = pd.DataFrame.from_dict(p_dict, orient='index')
+                r_df = pd.DataFrame.from_dict(r_dict, orient='index')
+                p_total = pd.concat([p_total, p_df])
+                r_total = pd.concat([r_total, r_df])
+            r_total = r_total.reset_index()
+            p_total = p_total.reset_index()
+            r_total = r_total.rename(columns={"index": "Parameter", 0: "r"})
+            p_total = p_total.rename(columns={"index": "Parameter", 0: "p"})
+            p_total= p_total.round(6)
+            r_total= r_total.round(6)
+            r_total = r_total.drop_duplicates(subset=["r"], keep="first")
+            complete = pd.merge(r_total, p_total, on="Parameter", how="left")
+            complete = complete[complete.r != 1]
+            complete=complete.sort_values(by=['r'], ascending=False)
+            complete = complete.reset_index()
+            complete = complete.drop(columns="index")
+            # Sind alle Werte und Regressionen drin
+            # complete.to_excel("Alle Regressionen {}.xlsx".format(today)) 
+            signifikant = complete[complete.p <= 0.05]
+            # Hier nur die signifikanten unter p wert von 5%
+            # signifikant.to_excel("Signifikante Regressionen {}.xlsx".format(today))
+            return complete, signifikant
+        
+        complete, signifikant = regressionen(df)
 
-            proscons = []
+        st.dataframe(signifikant)
 
-            for block in tqdm(blocks, desc="Processing blocks", unit="block"):
-                messages = [
-                    {"role": "system", "content": "Du bist ein KI-Sprachmodell, das darauf trainiert ist, eine Liste der häufigsten Stärken und Schwächen einer Tierarztpraxis auf der Grundlage von Google Bewertungen zu erstellen."},
-                    {"role": "user", "content": f"Erstelle auf der Grundlage der folgenden Google-Bewertungen eine Liste mit den häufigsten Stärken und Schwächen der Tierarztpraxis: {block}"}
-                ]
-
-                completion = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=messages,
-                    # You can change the max_tokens amount to increase or decrease the length of the results pros and cons list. If you increase it too much, you will exceed chatGPT's limits though.
-                    max_tokens=250,
-                    n=1,
-                    stop=None,
-                        # You can adjust how "creative" (i.e. true to the original reviewer's intent) chatGPT will be with it's summary be adjusting this temperature value. 0.7 is usually a safe amount
-                    temperature=0.7
-                )
-
-                procon = completion.choices[0].message.content
-                proscons.append(procon)
-
-                # Gefundene Stärken und Schwächen in einer Liste zusammenfassen 
-            combined_proscons = "\n\n".join(proscons)
-            return combined_proscons
-        summary_proscons = generate_proscons_list(all_reviews)
-
-        df_proscons = pd.DataFrame()
-        list_proscons = []
-        list_proscons.append(summary_proscons)
-        df_proscons["pros_cons"] = list_proscons
-
-        # Create Word document
-        document = Document()
-        document.add_heading("Stärken und Schwächen Zusammenfassung", level=0)
-        table = document.add_table(rows=len(df_proscons.index), cols=1)
-        for i, row in df_proscons.iterrows():
-            table.cell(i, 0).text = row["pros_cons"]
-        document.add_page_break()
-
-        # Download Word document
-        with io.BytesIO() as output:
-            document.save(output)
-            if st.download_button(label='Download', data=output.getvalue(), file_name='Ergebnisse.docx', mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'):
-                pass
+        @st.cache_data(ttl=600)
+        def create_plots(column_x, column_y, df):
+            x = df[column_x]
+            y = df[column_y] 
+            slope, intercept, r, p, std_err = stats.linregress(x, y)    
+            def myfunc(x):
+                return slope * x + intercept
+            mymodel = list(map(myfunc, x))
+            plt.ylim([0, 5])
+            plt.xlim([0, 5])
+            plt.scatter(x, y, color=("#132f55"))
+            plt.plot(x, mymodel,color=("#d52f89"))
+            plt.title("{} vs. {}".format(column_x, column_y))
+            plt.xlabel("{}".format(column_x))
+            plt.ylabel("{}".format(column_y))
+            plt.savefig(('{} vs {}'.format(column_x, column_y)), dpi=300)
+            plt.show()
 
 
+        plot_axis = signifikant["Parameter"]
+
+        x_axis = []
+        y_axis = []
+        for description in plot_axis:
+            x, y = description.split(' vs. ')
+            x_axis.append(x)
+            y_axis.append(y)
+
+        for i in range(len(plot_axis)):
+            x_axis = plot_axis[i].split(' vs. ')[0]
+            y_axis = plot_axis[i].split(' vs. ')[1]
+            st.write(f"Creating plot for {x_axis} vs {y_axis}")
+            create_plots(x_axis, y_axis, df)
+            
+
+        # column_names = []
+        # for column in df.columns:
+        #     column_names.append(column)
 
 
+        # x_axis = st.selectbox('X-Achse', column_names, key='x_axis')
+        # y_axis = st.selectbox('Y-Achse', column_names, key='y_axis')
 
 
+        # x_axis = st.text_input("Welche Variable soll auf der x-Achse sein?")
+        # y_axis = st.text_input("Welche Variable soll auf der y-Achse sein?")
+
+        # if st.button("Erstelle Plot"):
+        #     create_plots(x_axis, y_axis, df)

@@ -369,12 +369,12 @@ if input_method == MitarbeiterUmfrage:
             df.columns.values[12] = "Weiterbildungen und Karriere"
             return df
         
-        df = cleaning(df)
+        
 
         st.dataframe(df)
 
         if st.button("Auswertung starten"):
-
+            df = cleaning(df)
             def regressionen(df):
                 p_total = pd.DataFrame()
                 r_total = pd.DataFrame()
@@ -395,9 +395,6 @@ if input_method == MitarbeiterUmfrage:
                     r_df = pd.DataFrame.from_dict(r_dict, orient='index')
                     p_total = pd.concat([p_total, p_df])
                     r_total = pd.concat([r_total, r_df])
-
-                    # p_total = p_total.append(p_df)
-                    # r_total = r_total.append(r_df)
                 r_total = r_total.reset_index()
                 p_total = p_total.reset_index()
                 r_total = r_total.rename(columns={"index": "Parameter", 0: "r"})
@@ -410,40 +407,74 @@ if input_method == MitarbeiterUmfrage:
                 complete=complete.sort_values(by=['r'], ascending=False)
                 complete = complete.reset_index()
                 complete = complete.drop(columns="index")
-                # Sind alle Werte und Regressionen drin
-                complete.to_excel("Alle Regressionen {}.xlsx".format(today)) 
                 signifikant = complete[complete.p <= 0.05]
-                # Hier nur die signifikanten unter p wert von 5%
-                signifikant.to_excel("Signifikante Regressionen {}.xlsx".format(today))
                 return complete, signifikant
             
             complete, signifikant = regressionen(df)
 
             st.dataframe(signifikant)
 
-        # def create_plots(column_x, column_y, df):
-        #     x = df[column_x]
-        #     y = df[column_y] 
-        #     slope, intercept, r, p, std_err = stats.linregress(x, y)    
-        #     def myfunc(x):
-        #         return slope * x + intercept
-        #     mymodel = list(map(myfunc, x))
-        #     plt.ylim([0, 5])
-        #     plt.xlim([0, 5])
-        #     plt.scatter(x, y, color=("#132f55"))
-        #     plt.plot(x, mymodel,color=("#d52f89"))
-        #     plt.title("{} vs. {}".format(column_x, column_y))
-        #     plt.xlabel("{}".format(column_x))
-        #     plt.ylabel("{}".format(column_y))
-        #     plt.savefig(('{} vs {}'.format(column_x, column_y)), dpi=300)
-        #     plt.show()
+            def generate_csv(signifikant):
+                return signifikant.to_csv(index=False)
 
-        # x_axis = st.text_input("Welche Variable soll auf der x-Achse sein?")
-        # y_axis = st.text_input("Welche Variable soll auf der y-Achse sein?")
+            if st.download_button(label='Download CSV', data=generate_csv(signifikant), file_name='Signifikanteste_Ergebnisse.csv', mime='text/csv'):
+                pass
 
-        # if st.button("Erstelle Plot"):
-        #     create_plots(x-axis, y-axis, df)
 
+
+            def create_plots(column_x, column_y, df):
+                x = df[column_x]
+                y = df[column_y] 
+                slope, intercept, r, p, std_err = stats.linregress(x, y)    
+                def myfunc(x):
+                    return slope * x + intercept
+                mymodel = list(map(myfunc, x))
+                plt.ylim([0, 5])
+                plt.xlim([0, 5])
+                plt.scatter(x, y, color=("#132f55"))
+                plt.plot(x, mymodel,color=("#d52f89"))
+                plt.title("{} vs. {}".format(column_x, column_y))
+                plt.xlabel("{}".format(column_x))
+                plt.ylabel("{}".format(column_y))
+                plt.show()
+
+            plot_axis = signifikant["Parameter"]
+
+            for i in range(len(plot_axis)):
+                x_axis = plot_axis[i].split(' vs. ')[0]
+                y_axis = plot_axis[i].split(' vs. ')[1]
+
+                fig, ax = plt.subplots()
+                ax.scatter(df[x_axis], df[y_axis], color=("#132f55"))
+                ax.set_xlabel(x_axis)
+                ax.set_ylabel(y_axis)
+                ax.set_title("{} vs. {}".format(x_axis, y_axis))
+                x = df[x_axis]    
+                y = df[y_axis] 
+                slope, intercept, r, p, std_err = stats.linregress(x, y)    
+                def myfunc(x):
+                    return slope * x + intercept
+                mymodel = list(map(myfunc, x))
+                ax.plot(x, mymodel,color=("#d52f89"))
+
+                def download_plot(plot):
+                    output_buffer = io.BytesIO()
+                    plot.savefig(output_buffer, format='png')
+                    output_buffer.seek(0)
+                    return output_buffer
+                
+                st.pyplot(fig)
+                buffer = download_plot(fig)
+                st.download_button(
+                    label=f"Download Plot {x_axis} vs. {y_axis}",
+                    data=buffer,
+                    file_name="plot_{}_{}.png".format(x_axis, y_axis),
+                    mime='image/png'
+                )
+                
+
+
+                
 
 if input_method == Anleitung:
     st.title("Beschreibung & Kontakt")
