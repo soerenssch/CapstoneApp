@@ -372,8 +372,9 @@ if input_method == MitarbeiterUmfrage:
         df = cleaning(df)
 
         def regressionen(df):
-            p_total = pd.DataFrame()
+            
             r_total = pd.DataFrame()
+            p_total = pd.DataFrame()
             complete = pd.DataFrame()
             today = date.today()
             for column_x in df:
