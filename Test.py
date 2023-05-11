@@ -393,8 +393,11 @@ if input_method == MitarbeiterUmfrage:
                         r_dict['{} vs. {}'.format(column_x, column_y)] = r 
                     p_df = pd.DataFrame.from_dict(p_dict, orient='index')
                     r_df = pd.DataFrame.from_dict(r_dict, orient='index')
-                    p_total = p_total.append(p_df)
-                    r_total = r_total.append(r_df)
+                    p_total = pd.concat([p_total, p_df])
+                    r_total = pd.concat([r_total, r_df])
+
+                    # p_total = p_total.append(p_df)
+                    # r_total = r_total.append(r_df)
                 r_total = r_total.reset_index()
                 p_total = p_total.reset_index()
                 r_total = r_total.rename(columns={"index": "Parameter", 0: "r"})
