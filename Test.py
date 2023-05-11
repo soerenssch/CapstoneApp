@@ -412,7 +412,7 @@ if input_method == MitarbeiterUmfrage:
         
         complete, signifikant = regressionen(df)
 
-        st.df(signifikant)
+        st.dataframe(signifikant)
 
         def create_plots(column_x, column_y, df):
             x = df[column_x]
