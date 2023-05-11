@@ -431,8 +431,8 @@ if input_method == MitarbeiterUmfrage:
             plt.savefig(('{} vs {}'.format(column_x, column_y)), dpi=300)
             plt.show()
 
-        x-axis = st.text_input("Welche Variable soll auf der x-Achse sein?")
-        y-axis = st.text_input("Welche Variable soll auf der y-Achse sein?")
+        x_axis = st.text_input("Welche Variable soll auf der x-Achse sein?")
+        y_axis = st.text_input("Welche Variable soll auf der y-Achse sein?")
 
         if st.button("Erstelle Plot"):
             create_plots(x-axis, y-axis, dataframe)
