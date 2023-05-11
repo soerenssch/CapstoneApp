@@ -350,37 +350,37 @@ if input_method == MitarbeiterUmfrage:
 
     file = st.file_uploader("Lade deine Datei hier hoch:", type=["csv"])
     if file is not None:
-        dataframe = pd.read_csv(file)
+        df = pd.read_csv(file)
         
-        def cleaning(dataframe):
-            dataframe = dataframe.drop(dataframe.columns[[0,1,15]], axis=1 )
-            dataframe.columns.values[0] = "Wertschätzung"
-            dataframe.columns.values[1] = "Team"
-            dataframe.columns.values[2] = "Ausgeglichenheit"
-            dataframe.columns.values[3] = "Zufriedenheit als Mitarbeiter"
-            dataframe.columns.values[4] = "Weiterempfehlung als Arbeitgeber"
-            dataframe.columns.values[5] = "Zufriedenheit der Kunden"
-            dataframe.columns.values[6] = "Weiterempfehlung als Tierarztpraxis/-klinik"
-            dataframe.columns.values[7] = "Kennen der Werte"
-            dataframe.columns.values[8] = "Identifikation mit Werten"
-            dataframe.columns.values[9] = "Anweisungen"
-            dataframe.columns.values[10] = "Image in der CH"
-            dataframe.columns.values[11] = "Kommunikation Head Office"
-            dataframe.columns.values[12] = "Weiterbildungen und Karriere"
-            return dataframe
+        def cleaning(df):
+            df = df.drop(df.columns[[0,1,15]], axis=1 )
+            df.columns.values[0] = "Wertschätzung"
+            df.columns.values[1] = "Team"
+            df.columns.values[2] = "Ausgeglichenheit"
+            df.columns.values[3] = "Zufriedenheit als Mitarbeiter"
+            df.columns.values[4] = "Weiterempfehlung als Arbeitgeber"
+            df.columns.values[5] = "Zufriedenheit der Kunden"
+            df.columns.values[6] = "Weiterempfehlung als Tierarztpraxis/-klinik"
+            df.columns.values[7] = "Kennen der Werte"
+            df.columns.values[8] = "Identifikation mit Werten"
+            df.columns.values[9] = "Anweisungen"
+            df.columns.values[10] = "Image in der CH"
+            df.columns.values[11] = "Kommunikation Head Office"
+            df.columns.values[12] = "Weiterbildungen und Karriere"
+            return df
         
-        dataframe = cleaning(dataframe)
+        df = cleaning(df)
 
-        def regressionen(dataframe):
+        def regressionen(df):
             p_total = pd.DataFrame()
             r_total = pd.DataFrame()
             complete = pd.DataFrame()
             today = date.today()
-            for column_x in dataframe:
+            for column_x in df:
                 p_dict = {}
                 r_dict = {}
-                for column_y in dataframe:
-                    df_copy = dataframe.dropna(subset=[column_x, column_y])
+                for column_y in df:
+                    df_copy = df.dropna(subset=[column_x, column_y])
                     x = df_copy[column_x]
                     y = df_copy[column_y]  
                     y = y.dropna()
@@ -410,13 +410,13 @@ if input_method == MitarbeiterUmfrage:
             signifikant.to_excel("Signifikante Regressionen {}.xlsx".format(today))
             return complete, signifikant
         
-        complete, signifikant = regressionen(dataframe)
+        complete, signifikant = regressionen(df)
 
-        st.dataframe(signifikant)
+        st.df(signifikant)
 
-        def create_plots(column_x, column_y, dataframe):
-            x = dataframe[column_x]
-            y = dataframe[column_y] 
+        def create_plots(column_x, column_y, df):
+            x = df[column_x]
+            y = df[column_y] 
             slope, intercept, r, p, std_err = stats.linregress(x, y)    
             def myfunc(x):
                 return slope * x + intercept
@@ -435,7 +435,7 @@ if input_method == MitarbeiterUmfrage:
         y_axis = st.text_input("Welche Variable soll auf der y-Achse sein?")
 
         if st.button("Erstelle Plot"):
-            create_plots(x-axis, y-axis, dataframe)
+            create_plots(x-axis, y-axis, df)
 
 
 if input_method == Anleitung:
