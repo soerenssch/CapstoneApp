@@ -444,7 +444,7 @@ if input_method == MitarbeiterUmfrage:
                 x_axis = plot_axis[i].split(' vs. ')[0]
                 y_axis = plot_axis[i].split(' vs. ')[1]
 
-                fig, ax = plt.subplots()
+                fig, ax = plt.subplots(figsize=(10, 10))
                 ax.scatter(df[x_axis], df[y_axis], color=("#132f55"))
                 ax.set_xlabel(x_axis)
                 ax.set_ylabel(y_axis)
