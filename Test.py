@@ -446,7 +446,6 @@ if input_method == MitarbeiterUmfrage:
                 list_p.append(p[i])
                 list_r.append(r[i])
 
-
             parameter = signifikant["Parameter"]
 
             for i in range(len(signifikant)):
@@ -463,37 +462,10 @@ if input_method == MitarbeiterUmfrage:
                 def myfunc(x):
                     return slope * x + intercept
                 mymodel = list(map(myfunc, x))
+                
+                ax.plot(x, mymodel, color=("#d52f89"), label=f"p={list_p[i]:.4f} \n\n r={list_r[i]:.4f}")
                 ax.legend()
-                ax.plot(x, mymodel,color=("#d52f89"))#, label=f"p={list_p[i]:.4f}, r={list_r[i]:.4f}"
                 
-                # Add a legend
-                
-
-                
-
-
-
-
-            # plot_axis = signifikant["Parameter"]
-
-            # for i in range(len(plot_axis)):
-            #     x_axis = plot_axis[i].split(' vs. ')[0]
-            #     y_axis = plot_axis[i].split(' vs. ')[1]
-
-            #     fig, ax = plt.subplots(figsize=(5, 3))
-            #     ax.scatter(df[x_axis], df[y_axis], color=("#132f55"))
-            #     ax.set_xlabel(x_axis)
-            #     ax.set_ylabel(y_axis)
-            #     ax.set_title("{} vs. {}".format(x_axis, y_axis))
-            #     x = df[x_axis]    
-            #     y = df[y_axis] 
-            #     slope, intercept, r, p, std_err = stats.linregress(x, y)    
-            #     def myfunc(x):
-            #         return slope * x + intercept
-            #     mymodel = list(map(myfunc, x))
-                
-            #     ax.plot(x, mymodel,color=("#d52f89"))
-
                 def download_plot(plot):
                     output_buffer = io.BytesIO()
                     plot.savefig(output_buffer, format='png')
