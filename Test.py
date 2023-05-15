@@ -79,7 +79,7 @@ elif input_method == SentimentAnalyse:
 elif input_method == MitarbeiterUmfrage:
     with st.sidebar:
         st.header("Beschreibung: Mitarbeiterumfrage")
-        st.write("Mithilfe von linearen Regressionen können die Ergebnisse der Mitarbeiterumfrage noch detaillierter ausgewertet werden. Dabei werden die Stärke und Signifikanz der Zusammenhänge ersichtlich und automatisch graphisch dargestellt.")
+        st.write("Mithilfe von linearen Regressionen können die Ergebnisse der Mitarbeiterumfrage detailliert ausgewertet werden. Dabei werden die Stärke und Signifikanz der Zusammenhänge ersichtlich und automatisch graphisch dargestellt.")
 
 elif input_method == Anleitung:
     with st.sidebar:
