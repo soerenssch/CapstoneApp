@@ -79,7 +79,7 @@ elif input_method == SentimentAnalyse:
 elif input_method == MitarbeiterUmfrage:
     with st.sidebar:
         st.header("Beschreibung: Mitarbeiterumfrage")
-        st.write("XXX einfügen XXX")
+        st.write("Mithilfe von linearen Regressionen können die Ergebnisse der Mitarbeiterumfrage noch detaillierter ausgewertet werden. Dabei werden die Stärke und Signifikanz der Zusammenhänge ersichtlich und automatisch graphisch dargestellt.")
 
 elif input_method == Anleitung:
     with st.sidebar:
@@ -345,7 +345,7 @@ if input_method == SentimentAnalyse:
                     pass
 
 if input_method == MitarbeiterUmfrage:
-    st.title("Automatische Auswertung der standardisierten Mitarbeiterumfrage")
+    st.title("Auswertung der Mitarbeiterumfrage")
     st.write("Hier hochladen")
 
     file = st.file_uploader("Lade deine Datei hier hoch:", type=["csv"])
@@ -438,12 +438,13 @@ if input_method == MitarbeiterUmfrage:
                 plt.ylabel("{}".format(column_y))
                 plt.show()
 
-            plot_axis = signifikant["Parameter"]
+            r = signifikant["r"]
+            p = signifikant["p"] 
+            parameter = signifikant["Parameter"]
 
-            for i in range(len(plot_axis)):
-                x_axis = plot_axis[i].split(' vs. ')[0]
-                y_axis = plot_axis[i].split(' vs. ')[1]
-
+            for i in range(len(signifikant)):
+                x_axis = parameter[i].split(' vs. ')[0]
+                y_axis = parameter[i].split(' vs. ')[1]
                 fig, ax = plt.subplots(figsize=(5, 3))
                 ax.scatter(df[x_axis], df[y_axis], color=("#132f55"))
                 ax.set_xlabel(x_axis)
@@ -455,7 +456,36 @@ if input_method == MitarbeiterUmfrage:
                 def myfunc(x):
                     return slope * x + intercept
                 mymodel = list(map(myfunc, x))
-                ax.plot(x, mymodel,color=("#d52f89"))
+                ax.legend()
+                ax.plot(x, mymodel,color=("#d52f89"), label=f"p={p[i]:.4f}, r={r[i]:.4f})")
+                
+                # Add a legend
+                
+
+                
+
+
+
+
+            # plot_axis = signifikant["Parameter"]
+
+            # for i in range(len(plot_axis)):
+            #     x_axis = plot_axis[i].split(' vs. ')[0]
+            #     y_axis = plot_axis[i].split(' vs. ')[1]
+
+            #     fig, ax = plt.subplots(figsize=(5, 3))
+            #     ax.scatter(df[x_axis], df[y_axis], color=("#132f55"))
+            #     ax.set_xlabel(x_axis)
+            #     ax.set_ylabel(y_axis)
+            #     ax.set_title("{} vs. {}".format(x_axis, y_axis))
+            #     x = df[x_axis]    
+            #     y = df[y_axis] 
+            #     slope, intercept, r, p, std_err = stats.linregress(x, y)    
+            #     def myfunc(x):
+            #         return slope * x + intercept
+            #     mymodel = list(map(myfunc, x))
+                
+            #     ax.plot(x, mymodel,color=("#d52f89"))
 
                 def download_plot(plot):
                     output_buffer = io.BytesIO()
