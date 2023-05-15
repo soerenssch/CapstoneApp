@@ -457,7 +457,7 @@ if input_method == MitarbeiterUmfrage:
                     return slope * x + intercept
                 mymodel = list(map(myfunc, x))
                 ax.legend()
-                ax.plot(x, mymodel,color=("#d52f89"), label=f"p={p[i]:.4f}, r={r[i]:.4f})")
+                ax.plot(x, mymodel,color=("#d52f89"))#, label=f"p={p[i]:.4f}, r={r[i]:.4f})")
                 
                 # Add a legend
                 
