@@ -440,6 +440,13 @@ if input_method == MitarbeiterUmfrage:
 
             r = signifikant["r"]
             p = signifikant["p"] 
+            list_r = []
+            list_p = []
+            for i in range(len(p)):
+                list_p.append(p[i])
+                list_r.append(r[i])
+
+
             parameter = signifikant["Parameter"]
 
             for i in range(len(signifikant)):
@@ -457,7 +464,7 @@ if input_method == MitarbeiterUmfrage:
                     return slope * x + intercept
                 mymodel = list(map(myfunc, x))
                 ax.legend()
-                ax.plot(x, mymodel,color=("#d52f89"))#, label=f"p={p[i]:.4f}, r={r[i]:.4f})")
+                ax.plot(x, mymodel,color=("#d52f89")), label=f"p={list_p[i]:.4f}, r={list_r[i]:.4f}"
                 
                 # Add a legend
                 
