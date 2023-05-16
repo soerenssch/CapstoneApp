@@ -509,10 +509,10 @@ if input_method == Anleitung:
     \n\nDer r-Wert ist ein Indikator für die Korrelation von zwei Fragen. Je näher r bei Null liegt, desto schwächer ist der lineare Zusammenhang. Positive r-Werte zeigen eine positive Korrelation an, bei der die Werte beider Variable tendenziell gemeinsam ansteigen. Negative r-Werte zeigen eine negative Korrelation an, bei der die Werte einer Variable tendenziell ansteigen, wenn die Werte der anderen Variablen fallen. 
     \n\nDer p-Wert misst die Wahrscheinlichkeit, dass ein in der Umfrage beobachteter Unterschied zwischen zwei Fragen zufällig entstanden sein könnte. Ist diese Wahrscheinlichkeit gering, dann ist der beobachtete Unterschied vermutlich statistisch signifikant und eventuell auch auf Mitarbeiter übertragbar, die nicht bei der Umfrage teilgenommen haben. Das Signifikanzniveau wurde auf 0.05 eingestellt, deshalb werden nur Zusammenhänge angezeigt, welche einen p-Wert von unter 0.05 erreicht haben und somit signifikant sind. 
 
-
     """)
 
     st.header("Kontaktformular")
+    st.write("Bei Fragen können Sie uns hier gerne kontaktieren!")
 
     contact_form = """
     <form action="https://formsubmit.co/soeren.schlisske@web.de" method="POST">
