@@ -68,13 +68,13 @@ input_method = st.sidebar.radio("Wähle eine Option:", (WebScraping, SentimentAn
 if input_method == WebScraping:
     with st.sidebar:
         st.header("Beschreibung: Web Scraping")
-        st.write("Im ersten Schritt werden dir die Reviews der jeweils ausgewählten Standorte per Web Scraping zum Download zur Verfügung gestellt.")
+        st.write("Hier werden Ihnen die Reviews der jeweils ausgewählten Standorte per Web Scraping zum Download zur Verfügung gestellt.")
         # Add any additional information or instructions for this option
 
 elif input_method == SentimentAnalyse:
     with st.sidebar:
         st.header("Beschreibung: Sentiment-Analyse")
-        st.write("In diesem Schritt werden die zuvor gescrapten Reviews hochgeladen und ausgewertet.")
+        st.write("Hier werden die zuvor gescrapten Reviews hochgeladen und ausgewertet mithilfe einer Sentiment-Analyse ausgewertet.")
 
 elif input_method == MitarbeiterUmfrage:
     with st.sidebar:
@@ -83,7 +83,7 @@ elif input_method == MitarbeiterUmfrage:
 
 elif input_method == Anleitung:
     with st.sidebar:
-        st.write("Hier findest du einen Überblick über die Funktionsweise sowie die einzelnen Schritte der Sentiment-Analyse. Zusätzlich liegt ein Kontaktformular vor, solltest du auftretende Fragen haben.")
+        st.write("Hier findest du einen Überblick über die Funktionsweise der verschiedenen Tools. Zusätzlich liegt ein Kontaktformular vor, sollten Sie auftretende Fragen haben.")
 
 
 ### WebScraping
