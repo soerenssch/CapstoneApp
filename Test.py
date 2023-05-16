@@ -269,7 +269,7 @@ if input_method == SentimentAnalyse:
         
             fig = generate_plot(df)
             st.pyplot(fig)
-            st.write(f"Die durchschnittliche Bewertung beträgt {round(df['Rating'].mean(), 2)} bei {round(df['Rating'].count(), 2)} Bewertungen")
+            st.write(f"Die durchschnittliche Bewertung beträgt {round(df['Rating'].mean(), 3)} bei {round(df['Rating'].count(), 2)} Bewertungen. Die Standardabweichung beträgt {round(df['Rating'].std(), 2)}.")
             
 
             download = download_file(fig)
