@@ -265,6 +265,7 @@ if input_method == SentimentAnalyse:
                 tick_positions = [1.415, 2.25, 3, 3.85, 4.63]
                 ax.set_xticks(tick_positions)
                 ax.set_xticklabels(tick_labels, ha='center') # Set horizontal alignment to center
+                ax.legend()
                 return fig
         
             fig = generate_plot(df)
