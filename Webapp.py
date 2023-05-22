@@ -492,11 +492,11 @@ if input_method == MitarbeiterUmfrage:
 if input_method == Anleitung:
     st.title("Beschreibung & Kontakt")
     st.write("""Um das Tool optimal nutzen zu können, müssen Sie sich bei Outscraper und OpenAI einen Account anlegen und einen API-Key erstellen. WICHTIG: Geben Sie Ihren Key nicht an Dritte weiter! 
-    Die Links zur Anmeldung findest du hier:
+    Die Links zur Anmeldung finden Sie hier:
 
     \n\nOutscraper: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm
 
-    \n\nOpenAI: https://chat.openai.com/auth/login
+    \n\nOpenAI: https://chat.openai.com/auth/login\n\n
 
 
     \n\n\n\nWeb Scraping:
