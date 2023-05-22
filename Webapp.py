@@ -271,13 +271,11 @@ if input_method == SentimentAnalyse:
                 df_Anzahl = df['Rating'].count()
                 df_mean = df['Rating'].mean()
                 df_std = df['Rating'].std()
-                ax.legend([f'Anzahl Bewertungen: {df_Anzahl:.2f}\n\n Durchschnitt: {df_mean:.2f}\n\n Standardabweichung: {df_std:.2f}'])
+                ax.legend([f'Anzahl Bewertungen: {df_Anzahl:.0f}\n\n Durchschnitt: {df_mean:.2f}\n\n Standardabweichung: {df_std:.2f}'])
                 return fig
         
             fig = generate_plot(df)
-            st.pyplot(fig)
-            st.write(f"Die durchschnittliche Bewertung beträgt {round(df['Rating'].mean(), 3)} bei {round(df['Rating'].count(), 2)} Bewertungen. Die Standardabweichung beträgt {round(df['Rating'].std(), 2)}.")
-            
+            st.pyplot(fig)            
 
             download = download_file(fig)
             st.download_button(
