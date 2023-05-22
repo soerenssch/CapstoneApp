@@ -268,18 +268,27 @@ if input_method == SentimentAnalyse:
                 tick_positions = [1.415, 2.25, 3, 3.85, 4.63]
                 ax.set_xticks(tick_positions)
                 ax.set_xticklabels(tick_labels, ha='center')
+
                 df_Anzahl = df['Rating'].count()
                 df_mean = df['Rating'].mean()
                 df_std = df['Rating'].std()
                 ax.legend([f'Anzahl Bewertungen: {df_Anzahl:.0f}\n\n Durchschnitt: {df_mean:.2f}\n\n Standardabweichung: {df_std:.2f}'])
+
+                # Add numbers above bars
+                for count, patch in zip(counts, patches):
+                    height = patch.get_height()
+                    ax.annotate(f'{count}', xy=(patch.get_x() + patch.get_width() / 2, height), xytext=(0, 3),
+                                textcoords='offset points', ha='center', va='bottom')
+
                 return fig
+
         
             fig = generate_plot(df)
             st.pyplot(fig)            
 
             download = download_file(fig)
             st.download_button(
-                label='Download plot',
+                label='Download Plot',
                 data=download,
                 file_name='plot.png',
                 mime='image/png'
