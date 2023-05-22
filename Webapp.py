@@ -83,6 +83,7 @@ elif input_method == MitarbeiterUmfrage:
 
 elif input_method == Anleitung:
     with st.sidebar:
+        st.header("Beschreibung")
         st.write("Hier finden Sie einen Überblick über die Funktionsweise der verschiedenen Tools. Zusätzlich liegt ein Kontaktformular vor, sollten Sie auftretende Fragen haben.")
 
 
@@ -288,9 +289,9 @@ if input_method == SentimentAnalyse:
 
             download = download_file(fig)
             st.download_button(
-                label='Download Plot',
+                label='Download Grafik',
                 data=download,
-                file_name='plot.png',
+                file_name='grafik.png',
                 mime='image/png'
             )
             
@@ -488,9 +489,9 @@ if input_method == MitarbeiterUmfrage:
                 st.pyplot(fig)
                 buffer = download_plot(fig)
                 st.download_button(
-                    label=f"Download Plot {x_axis} vs. {y_axis}",
+                    label=f"Download Grafik {x_axis} vs. {y_axis}",
                     data=buffer,
-                    file_name="plot_{}_{}.png".format(x_axis, y_axis),
+                    file_name="Grafik_{}_{}.png".format(x_axis, y_axis),
                     mime='image/png'
                 )
                 
@@ -514,7 +515,7 @@ if input_method == Anleitung:
 
     \n\n\n\nSentiment-Analyse:
 
-    \n\nHier wird die beim Web Scraping erstellte .csv-Datei, die nun ausgewertet werden soll, zur weiteren Auswertung wieder hochgeladen. Das Modell analysiert nun die Texte auf positive und negative Aspekte, weshalb die Sentiment-Analyse auch auf andere Datensätze mit gleichem Format angewendet werden kann. Zu beachten ist, dass alle Textausschnitte in derselben Spalte vorliegen müssen, da die Analyse nur für eine Spalte möglich ist. Um die Analyse durchzuführen, muss nach Upload der Daten zusätzlich der Name der Spalte angegeben werden, die nachfolgend ausgewertet werden soll. Die auszuwertende Spalte, der im Web Scraping exportierten Daten ist immer durch den Namen „Review“ gekennzeichnet - jedoch kann dies bei eigenen Datensätzen abweichen. In diesem Fall muss der Name der auszuwertenden Spalte manuell eingetragen werden. In einem letzten Schritt muss auch hier wieder der passende API-Key eingefügt werden. In Abhängigkeit der Grösse des jeweiligen Datensatzes kann die Analyse einige Sekunden bis wenige Minuten dauern. Das endgültige Ergebnis kann, nach Abschluss der Sentiment-Analyse, als Word-Datei heruntergeladen werden. In dieser sind die Stärken und Schwächen respektive die positiven und negativen Aspekte der Bewertungen übersichtlich aufgelistet.
+    \n\nHier wird die beim Web Scraping erstellte .csv-Datei, die nun ausgewertet werden soll, zur weiteren Auswertung wieder hochgeladen. Das Modell analysiert nun die Texte auf positive und negative Aspekte, weshalb die Sentiment-Analyse auch auf andere Datensätze mit gleichem Format angewendet werden kann. Zu beachten ist, dass alle Textausschnitte in derselben Spalte vorliegen müssen, da die Analyse nur für eine Spalte möglich ist. Um die Analyse durchzuführen, muss nach Upload der Daten zusätzlich der Name der Spalte angegeben werden, die nachfolgend ausgewertet werden soll. Die auszuwertende Spalte, der im Web Scraping exportierten Daten ist immer durch den Namen „Review“ gekennzeichnet - jedoch kann dies bei eigenen Datensätzen abweichen. In diesem Fall muss der Name der auszuwertenden Spalte manuell eingetragen werden. In einem letzten Schritt muss auch hier wieder der passende API-Key eingefügt werden. Die Kosten liegen dabei bei 0,002$ je 1000 Tokens, wobei 1000 Tokens ca. 750 Wörter darstellen. Es zählen ausserdem nicht nur die Wörter des Inputs, sondern auch die des Outputs. D.h. bei 200 Reviews à 20 Wörtern als Input und der gleichen Anzahl als Output, entstehen Kosten von ca. 0,02$. In Abhängigkeit der Grösse des jeweiligen Datensatzes kann die Analyse einige Sekunden bis wenige Minuten dauern. Das endgültige Ergebnis kann, nach Abschluss der Sentiment-Analyse, als Word-Datei heruntergeladen werden. In dieser sind die Stärken und Schwächen respektive die positiven und negativen Aspekte der Bewertungen übersichtlich aufgelistet.
     
     \n\nAuswertung der Mitarbeiterumfrage:
 
