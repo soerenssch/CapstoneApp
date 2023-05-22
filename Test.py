@@ -61,7 +61,7 @@ MitarbeiterUmfrage = "Auswertung der Mitarbeiterumfrage"
 Anleitung = "Beschreibung & Kontakt"
 
 st.sidebar.title("Analysetools:")
-input_method = st.sidebar.radio((WebScraping, SentimentAnalyse, MitarbeiterUmfrage, Anleitung))
+input_method = st.sidebar.radio("Wählen Sie eine Option:", (WebScraping, SentimentAnalyse, MitarbeiterUmfrage, Anleitung))
 
 
 # Depending on which option is selected, display the appropriate information
