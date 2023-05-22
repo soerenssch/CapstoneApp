@@ -277,7 +277,7 @@ if input_method == SentimentAnalyse:
                 # Add numbers above bars
                 for count, patch in zip(counts, patches):
                     height = patch.get_height()
-                    ax.annotate(f'{count}', xy=(patch.get_x() + patch.get_width() / 2, height), xytext=(0, 3),
+                    ax.annotate(f'{count:.0f}', xy=(patch.get_x() + patch.get_width() / 2, height), xytext=(0, 3),
                                 textcoords='offset points', ha='center', va='bottom')
 
                 return fig
