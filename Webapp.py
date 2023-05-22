@@ -267,8 +267,11 @@ if input_method == SentimentAnalyse:
                 tick_labels = ['1 Stern', '2 Sterne', '3 Sterne', '4 Sterne', '5 Sterne']
                 tick_positions = [1.415, 2.25, 3, 3.85, 4.63]
                 ax.set_xticks(tick_positions)
-                ax.set_xticklabels(tick_labels, ha='center') # Set horizontal alignment to center
-                # ax.legend()
+                ax.set_xticklabels(tick_labels, ha='center')
+                df_Anzahl = df['Rating'].count()
+                df_mean = df['Rating'].mean()
+                df_std = df['Rating'].std()
+                ax.legend([f'Anzahl Bewertungen: {df_Anzahl:.2f}\n\n Durchschnitt: {df_mean:.2f}\n\n Standardabweichung: {df_std:.2f}'])
                 return fig
         
             fig = generate_plot(df)
