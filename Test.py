@@ -61,7 +61,7 @@ MitarbeiterUmfrage = "Auswertung der Mitarbeiterumfrage"
 Anleitung = "Beschreibung & Kontakt"
 
 st.sidebar.title("Analysetools:")
-input_method = st.sidebar.radio("Wählen Sie eine Option:", (WebScraping, SentimentAnalyse, MitarbeiterUmfrage, Anleitung))
+input_method = st.sidebar.radio((WebScraping, SentimentAnalyse, MitarbeiterUmfrage, Anleitung))
 
 
 # Depending on which option is selected, display the appropriate information
@@ -145,6 +145,7 @@ def update_selection(ID_MAP, checkbox_states, key):
     return checkbox_states
 
 if input_method == WebScraping:
+    st.title("Web Scraping")
     st.write("Mithilfe von Web Scraping werden ab einem ausgewählten Zeitpunkt alle Google Reviews der gewählten Standorte zum Download bereitgestellt. Bitte wählen Sie die Standorte aus, die Sie interessieren.")
 
 
@@ -220,6 +221,7 @@ if input_method == WebScraping:
 
 ### SentimentAnalyse  
 if input_method == SentimentAnalyse:
+    
 
     def download_file(file):
         b = BytesIO()
@@ -228,6 +230,7 @@ if input_method == SentimentAnalyse:
         return b
 
     # Main code
+    st.title("Sentiment-Analyse")
     file = st.file_uploader("Laden Sie Ihre Datei hier hoch:", type=["csv"])
     if file is not None:
         df = pd.read_csv(file)
