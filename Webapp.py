@@ -502,7 +502,6 @@ if input_method == Anleitung:
     \n\n\n\nWeb Scraping:
 
     \n\nBeim sogenannten Web Scraping greift das Programm auf die Google-Maps Bewertungen der VetTrust zu und fasst diese innerhalb einer „.csv (comma-seperated-values)“-Datei zusammen, welche zentral über das Programm Excel geöffnet werden kann. Um die relevanten Daten zu erhalten, muss zudem angegeben werden, von welchem Standort und ab welchem Zeitpunkt die Exporte benötigt werden. Darüber hinaus wird der zuvor erstellte API-Key benötigt, um das Web Scraping durchzuführen. Je nach Anzahl der Standorte sowie dem ausgewählten Zeitraum dauert diese Applikation wenige Sekunden bis einige Minuten. Das Ergebnis kann abschliessend heruntergeladen werden, um es entweder manuell zu betrachten oder mit der Sentiment-Analyse näher zu analysieren. 
-    Die Kosten umfassen dabei 0,002$ pro Review, d.h. bei 200 Reviews fallen Kosten von 0,04$ an.
 
     \n\n\n\nSentiment-Analyse:
 
