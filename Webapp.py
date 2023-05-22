@@ -289,7 +289,7 @@ if input_method == SentimentAnalyse:
         if not Spalte:
             Spalte = "Review"
 
-        st.write("Melden Sie sich mit dem nachfolgenden Link bei OpenAI an, um Ihren API-Key zu erstellen: https://chat.openai.com/auth/login")
+        st.write("Melden Sie sich mit dem nachfolgenden Link bei OpenAI an, um Ihren API-Key zu erstellen: https://platform.openai.com/")
         OpenAI_API = st.text_input("Geben Sie hier Ihren OpenAI API-Key an:")
         
         openai.api_key = OpenAI_API
