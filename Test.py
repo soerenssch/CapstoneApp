@@ -61,7 +61,7 @@ MitarbeiterUmfrage = "Auswertung der Mitarbeiterumfrage"
 Anleitung = "Beschreibung & Kontakt"
 
 st.sidebar.title("Analysetools:")
-input_method = st.sidebar.radio("Wähle eine Option:", (WebScraping, SentimentAnalyse, MitarbeiterUmfrage, Anleitung))
+input_method = st.sidebar.radio("Wählen Sie eine Option:", (WebScraping, SentimentAnalyse, MitarbeiterUmfrage, Anleitung))
 
 
 # Depending on which option is selected, display the appropriate information
@@ -83,7 +83,7 @@ elif input_method == MitarbeiterUmfrage:
 
 elif input_method == Anleitung:
     with st.sidebar:
-        st.write("Hier findest du einen Überblick über die Funktionsweise der verschiedenen Tools. Zusätzlich liegt ein Kontaktformular vor, sollten Sie auftretende Fragen haben.")
+        st.write("Hier finden Sie einen Überblick über die Funktionsweise der verschiedenen Tools. Zusätzlich liegt ein Kontaktformular vor, sollten Sie auftretende Fragen haben.")
 
 
 ### WebScraping
@@ -145,7 +145,7 @@ def update_selection(ID_MAP, checkbox_states, key):
     return checkbox_states
 
 if input_method == WebScraping:
-    st.write("Mithilfe von Web Scraping werden ab einem ausgewählten Zeitpunkt alle Google Reviews der gewählten Standorte zum Download bereitgestellt. Bitte wähle die Standorte aus, die dich interessieren.")
+    st.write("Mithilfe von Web Scraping werden ab einem ausgewählten Zeitpunkt alle Google Reviews der gewählten Standorte zum Download bereitgestellt. Bitte wählen Sie die Standorte aus, die Sie interessieren.")
 
 
     select_all = st.checkbox("Alle Standorte auswählen")
@@ -168,7 +168,7 @@ if input_method == WebScraping:
                 input_Outscraper.remove(place_id)
 
     
-    date_input = st.date_input('Gib das Datum an, ab dem du die Reviews exportieren willst:')
+    date_input = st.date_input('Geben Sie das Datum an, ab dem die Reviews exportiert werden sollen:')
     if date_input > datetime.datetime.today().date():
         st.error('Fehler: Datum darf nicht in der Zukunft liegen!')
     else:
@@ -181,9 +181,9 @@ if input_method == WebScraping:
     timestamp = int(timestamp)
     st.session_state.timestamp = timestamp
 
-    st.write("Melde dich mit dem nachfolgenden Link bei Outscraper an, um deinen eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
+    st.write("Melden Sie sich mit dem nachfolgenden Link bei Outscraper an, um Ihren eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
     
-    Outscraper_APIKey = st.text_input("Gib hier deinen Outscraper API-Key an:")
+    Outscraper_APIKey = st.text_input("Geben Sie hier Ihren Outscraper API-Key an:")
     client = ApiClient(api_key=Outscraper_APIKey)
 
     
@@ -228,7 +228,7 @@ if input_method == SentimentAnalyse:
         return b
 
     # Main code
-    file = st.file_uploader("Lade deine Datei hier hoch:", type=["csv"])
+    file = st.file_uploader("Laden Sie Ihre Datei hier hoch:", type=["csv"])
     if file is not None:
         df = pd.read_csv(file)
         df = df.dropna()
@@ -265,7 +265,7 @@ if input_method == SentimentAnalyse:
                 tick_positions = [1.415, 2.25, 3, 3.85, 4.63]
                 ax.set_xticks(tick_positions)
                 ax.set_xticklabels(tick_labels, ha='center') # Set horizontal alignment to center
-                ax.legend()
+                # ax.legend()
                 return fig
         
             fig = generate_plot(df)
@@ -281,12 +281,12 @@ if input_method == SentimentAnalyse:
                 mime='image/png'
             )
             
-        Spalte = st.text_input("Wie heisst die Spalte, die du auswerten möchtest?")
+        Spalte = st.text_input("Wie heisst die Spalte, die Sie auswerten möchten?")
         if not Spalte:
             Spalte = "Review"
 
-        st.write("Melde dich mit dem nachfolgenden Link bei OpenAI an, um deinen API-Key zu erstellen: https://chat.openai.com/auth/login")
-        OpenAI_API = st.text_input("Gib hier deinen OpenAI API-Key an:")
+        st.write("Melden Sie sich mit dem nachfolgenden Link bei OpenAI an, um Ihren API-Key zu erstellen: https://chat.openai.com/auth/login")
+        OpenAI_API = st.text_input("Geben Sie hier Ihren OpenAI API-Key an:")
         
         openai.api_key = OpenAI_API
         GPT_API_URL = "https://api.openai.com/v1/chat/completions"
@@ -347,9 +347,8 @@ if input_method == SentimentAnalyse:
 
 if input_method == MitarbeiterUmfrage:
     st.title("Auswertung der Mitarbeiterumfrage")
-    st.write("Hier hochladen")
 
-    file = st.file_uploader("Lade deine Datei hier hoch:", type=["csv"])
+    file = st.file_uploader("Laden Sie Ihre Datei hier hoch:", type=["csv"])
     if file is not None:
         df = pd.read_csv(file)
         
@@ -488,7 +487,7 @@ if input_method == MitarbeiterUmfrage:
 
 if input_method == Anleitung:
     st.title("Beschreibung & Kontakt")
-    st.write("""Um das Tool optimal nutzen zu können, musst du dir bei Outscraper und OpenAI einen Account anlegen und einen API-Key erstellen. WICHTIG: Gib deinen Key nicht an Dritte weiter! 
+    st.write("""Um das Tool optimal nutzen zu können, müssen Sie sich bei Outscraper und OpenAI einen Account anlegen und einen API-Key erstellen. WICHTIG: Geben Sie Ihren Key nicht an Dritte weiter! 
     Die Links zur Anmeldung findest du hier:
 
     \n\nOutscraper: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm
@@ -502,7 +501,7 @@ if input_method == Anleitung:
 
     \n\n\n\nSentiment-Analyse:
 
-    \n\nHier wird die beim Web Scraping heruntergeladene .csv-Datei, die nun ausgewertet werden soll, wieder hochgeladen. Das Modell analysiert dabei die Texte auf positive und negative Aspekte, weshalb auch eigene Datensätze mit gleichem Format verwendet werden können. Zu beachten ist, dass alle Textausschnitte in derselben Spalte vorliegen müssen, da diese sonst nicht für die Analyse erfasst werden können. Um die Analyse durchzuführen, muss nach Upload der Daten zusätzlich der Name der Spalte angegeben werden, die nachfolgend ausgewertet werden soll. Die auszuwertende Spalte, der in Schritt 1 exportierten Daten ist immer durch den Namen „Review“ gekennzeichnet, was jedoch bei eigenen Datensätzen abweichen kann. Abschliessend muss auch hier wieder der passende API-Key angegeben werden. In Abhängigkeit der Grösse des jeweiligen Datensatzes kann die Analyse einige Sekunden bis wenige Minuten dauern. Das endgültige Ergebnis kann dann als Word-Datei heruntergeladen werden, in der die Stärken und Schwächen respektive positiven und negativen Aspekte der Bewertungen übersichtlich aufgelistet sind.
+    \n\nHier wird die beim Web Scraping heruntergeladene .csv-Datei, die nun ausgewertet werden soll, wieder hochgeladen. Das Modell analysiert dabei die Texte auf positive und negative Aspekte, weshalb auch andere Datensätze mit gleichem Format verwendet werden können. Zu beachten ist, dass alle Textausschnitte in derselben Spalte vorliegen müssen, da diese sonst nicht für die Analyse erfasst werden können. Um die Analyse durchzuführen, muss nach Upload der Daten zusätzlich der Name der Spalte angegeben werden, die nachfolgend ausgewertet werden soll. Die auszuwertende Spalte, der in Schritt 1 exportierten Daten ist immer durch den Namen „Review“ gekennzeichnet, was jedoch bei eigenen Datensätzen abweichen kann. Abschliessend muss auch hier wieder der passende API-Key angegeben werden. In Abhängigkeit der Grösse des jeweiligen Datensatzes kann die Analyse einige Sekunden bis wenige Minuten dauern. Das endgültige Ergebnis kann dann als Word-Datei heruntergeladen werden, in der die Stärken und Schwächen respektive positiven und negativen Aspekte der Bewertungen übersichtlich aufgelistet sind.
     
     \n\nAuswertung der Mitarbeiterumfrage:
 
