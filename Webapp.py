@@ -509,10 +509,10 @@ if input_method == Anleitung:
     
     \n\nAuswertung der Mitarbeiterumfrage:
 
-    \n\nZuerst müssen Sie die csv-Datei der Mitarbeiterumfrage hochladen. Danach müssen Sie nur noch auf “Auswertung starten” klicken. Unser Modell vergleicht die Antworten jeder einzelnen Frage miteinander und findet mithilfe von linearen Regressionen Zusammenhänge in den Antworten. Sie erhalten eine neue csv-Datei fertig zum Herunterladen, welche eine Tabelle mit den Zusammenhängen und dem jeweiligen r-Wert und p-Wert darstellt. 
-    \n\nDer r-Wert ist ein Indikator für die Korrelation von zwei Fragen. Je näher r bei Null liegt, desto schwächer ist der lineare Zusammenhang. Positive r-Werte zeigen eine positive Korrelation an, bei der die Werte beider Variable tendenziell gemeinsam ansteigen. Negative r-Werte zeigen eine negative Korrelation an, bei der die Werte einer Variable tendenziell ansteigen, wenn die Werte der anderen Variablen fallen. 
-    \n\nDer p-Wert misst die Wahrscheinlichkeit, dass ein in der Umfrage beobachteter Unterschied zwischen zwei Fragen zufällig entstanden sein könnte. Ist diese Wahrscheinlichkeit gering, dann ist der beobachtete Unterschied vermutlich statistisch signifikant und eventuell auch auf Mitarbeiter übertragbar, die nicht bei der Umfrage teilgenommen haben. Das Signifikanzniveau wurde auf 0.05 eingestellt, deshalb werden nur Zusammenhänge angezeigt, welche einen p-Wert von unter 0.05 erreicht haben und somit signifikant sind. 
-
+    \n\nZuerst müssen Sie die .csv-Datei der Mitarbeiterumfrage hochladen. Danach müssen Sie nur noch auf “Auswertung starten” klicken. Unser Modell vergleicht die Antworten jeder einzelnen Frage miteinander und findet mithilfe von linearen Regressionen Zusammenhänge in den Antworten. Sie erhalten eine neue .csv-Datei fertig zum Herunterladen, die eine Tabelle mit den Zusammenhängen und dem jeweiligen r-Wert und p-Wert darstellt. 
+    \n\nDer r-Wert ist ein Indikator für die Korrelation von der Ergebnisse von zwei Fragen. Je näher r bei Null liegt, desto schwächer ist der lineare Zusammenhang. Positive r-Werte zeigen eine positive Korrelation an, bei der die Werte beider Variable tendenziell gemeinsam ansteigen. Negative r-Werte zeigen eine negative Korrelation an, bei der die Werte einer Variable tendenziell ansteigen, wenn die Werte der anderen Variable fallen. 
+    \n\nDer p-Wert misst die Wahrscheinlichkeit, dass ein in der Umfrage beobachteter Unterschied zwischen zwei Fragen zufällig entstanden sein könnte. Ist diese Wahrscheinlichkeit gering, dann ist der beobachtete Unterschied vermutlich statistisch signifikant und eventuell auch auf die Antworten von Mitarbeitenden übertragbar, die nicht bei der Umfrage teilgenommen haben. Das Signifikanzniveau wurde auf 0.05 eingestellt, deshalb werden nur Zusammenhänge angezeigt, welche einen p-Wert von unter 0.05 erreicht haben und somit statistisch signifikant sind. 
+    \n\nUm die letzte Spalte der Mitarbeiterumfrage ("Sonstiges Feedback") auszuwerten, empfehlen wir Ihnen die Nutzung der Sentiment-Analyse, wie im oberen Schritt beschrieben.
     """)
 
     st.header("Kontaktformular")
@@ -520,9 +520,9 @@ if input_method == Anleitung:
 
     contact_form = """
     <form action="https://formsubmit.co/soeren.schlisske@web.de" method="POST">
-        <input type="text" name="name" placeholder="Dein Name" required>
-        <input type="email" name="email" placeholder="Deine Email-Adresse" required>
-        <textarea name="message" placeholder="Deine Nachricht"></textarea>
+        <input type="text" name="name" placeholder="Ihr Name" required>
+        <input type="email" name="email" placeholder="Ihre Email-Adresse" required>
+        <textarea name="message" placeholder="Ihre Nachricht"></textarea>
         <button type="submit">Senden</button>
     </form>
     """
