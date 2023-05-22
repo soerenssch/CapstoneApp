@@ -183,7 +183,7 @@ if input_method == WebScraping:
     timestamp = int(timestamp)
     st.session_state.timestamp = timestamp
 
-    st.write("Melden Sie sich mit dem nachfolgenden Link bei Outscraper an, um Ihren eigenen API-Key zu erstellen: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm")
+    st.write("Melden Sie sich mit dem nachfolgenden Link bei Outscraper an, um Ihren eigenen API-Key zu erstellen: https://outscraper.com/")
     
     Outscraper_APIKey = st.text_input("Geben Sie hier Ihren Outscraper API-Key an:")
     client = ApiClient(api_key=Outscraper_APIKey)
@@ -303,7 +303,7 @@ if input_method == SentimentAnalyse:
         OpenAI_API = st.text_input("Geben Sie hier Ihren OpenAI API-Key an:")
         
         openai.api_key = OpenAI_API
-        GPT_API_URL = "https://api.openai.com/v1/chat/completions"
+        GPT_API_URL = "https://platform.openai.com/"
         all_reviews = "\n".join(df[Spalte].tolist())
         if st.button("Sentiment-Analyse starten"):
 
@@ -504,9 +504,9 @@ if input_method == Anleitung:
     st.write("""Um das Tool optimal nutzen zu können, müssen Sie sich bei Outscraper und OpenAI einen Account anlegen und einen API-Key erstellen. WICHTIG: Geben Sie Ihren Key nicht an Dritte weiter! 
     Die Links zur Anmeldung finden Sie hier:
 
-    \n\nOutscraper: https://outscraper.com/refer?referrer=YXV0aDB8NjQwMWIzZGNiZmMzM2FhMmM5ODA4ZWFm
+    \n\nOutscraper: https://outscraper.com/
 
-    \n\nOpenAI: https://chat.openai.com/auth/login\n\n
+    \n\nOpenAI: https://platform.openai.com/\n\n
 
 
     \n\n\n\nWeb Scraping:
@@ -515,7 +515,7 @@ if input_method == Anleitung:
 
     \n\n\n\nSentiment-Analyse:
 
-    \n\nHier wird die beim Web Scraping erstellte .csv-Datei, die nun ausgewertet werden soll, zur weiteren Auswertung wieder hochgeladen. Das Modell analysiert nun die Texte auf positive und negative Aspekte, weshalb die Sentiment-Analyse auch auf andere Datensätze mit gleichem Format angewendet werden kann. Zu beachten ist, dass alle Textausschnitte in derselben Spalte vorliegen müssen, da die Analyse nur für eine Spalte möglich ist. Um die Analyse durchzuführen, muss nach Upload der Daten zusätzlich der Name der Spalte angegeben werden, die nachfolgend ausgewertet werden soll. Die auszuwertende Spalte, der im Web Scraping exportierten Daten ist immer durch den Namen „Review“ gekennzeichnet - jedoch kann dies bei eigenen Datensätzen abweichen. In diesem Fall muss der Name der auszuwertenden Spalte manuell eingetragen werden. In einem letzten Schritt muss auch hier wieder der passende API-Key eingefügt werden. Die Kosten liegen dabei bei 0,002 Dollar je 1000 Tokens, wobei 1000 Tokens ca. 750 Wörter darstellen. Es zählen ausserdem nicht nur die Wörter des Inputs, sondern auch die des Outputs. D.h. bei 200 Reviews à 20 Wörtern als Input und der gleichen Anzahl als Output, entstehen Kosten von ca. 0,02 Dollar. In Abhängigkeit der Grösse des jeweiligen Datensatzes kann die Analyse einige Sekunden bis wenige Minuten dauern. Das endgültige Ergebnis kann, nach Abschluss der Sentiment-Analyse, als Word-Datei heruntergeladen werden. In dieser sind die Stärken und Schwächen respektive die positiven und negativen Aspekte der Bewertungen übersichtlich aufgelistet.
+    \n\nHier wird die beim Web Scraping erstellte .csv-Datei, die nun ausgewertet werden soll, zur weiteren Auswertung wieder hochgeladen. Das Modell analysiert nun die Texte auf positive und negative Aspekte, weshalb die Sentiment-Analyse auch auf andere Datensätze mit gleichem Format angewendet werden kann. Zu beachten ist, dass alle Textausschnitte in derselben Spalte vorliegen müssen, da die Analyse nur für eine Spalte möglich ist. Um die Analyse durchzuführen, muss nach Upload der Daten zusätzlich der Name der Spalte angegeben werden, die nachfolgend ausgewertet werden soll. Die auszuwertende Spalte, der im Web Scraping exportierten Daten ist immer durch den Namen „Review“ gekennzeichnet - jedoch kann dies bei eigenen Datensätzen abweichen. In diesem Fall muss der Name der auszuwertenden Spalte manuell eingetragen werden. In einem letzten Schritt muss auch hier wieder der passende API-Key eingefügt werden. Die Kosten liegen dabei bei 0,002 Dollar je 1000 Tokens, wobei 1000 Tokens ca. 750 Wörter sind. Es zählen ausserdem nicht nur die Wörter des Inputs, sondern auch die des Outputs. D.h. bei 200 Reviews à 20 Wörtern als Input und der gleichen Anzahl als Output, entstehen Kosten von ca. 0,02 Dollar. In Abhängigkeit der Grösse des jeweiligen Datensatzes kann die Analyse einige Sekunden bis wenige Minuten dauern. Das endgültige Ergebnis kann, nach Abschluss der Sentiment-Analyse, als Word-Datei heruntergeladen werden. In dieser sind die Stärken und Schwächen respektive die positiven und negativen Aspekte der Bewertungen übersichtlich aufgelistet.
     
     \n\nAuswertung der Mitarbeiterumfrage:
 
