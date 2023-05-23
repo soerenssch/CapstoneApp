@@ -295,7 +295,7 @@ if input_method == SentimentAnalyse:
                 mime='image/png'
             )
             
-        Spalte = st.text_input("Wie heisst die Spalte, die Sie auswerten möchten? (Standardmässig liegt die Bezeichnung bei 'Review')")
+        Spalte = st.text_input("Wie heisst die Spalte, die Sie auswerten möchten? (Wenn die auszuwertende Spalte 'Review' heisst, muss hier nichts angegeben werden)")
         if not Spalte:
             Spalte = "Review"
 
