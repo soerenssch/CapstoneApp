@@ -529,7 +529,7 @@ if input_method == Anleitung:
     st.write("Bei Fragen können Sie uns hier gerne kontaktieren!")
 
     contact_form = """
-    <form action="https://formsubmit.co/soeren.schlisske@web.de" method="POST">
+    <form action="https://formsubmit.co/WEB.de" method="POST">
         <input type="text" name="name" placeholder="Ihr Name" required>
         <input type="email" name="email" placeholder="Ihre Email-Adresse" required>
         <textarea name="message" placeholder="Ihre Nachricht"></textarea>
